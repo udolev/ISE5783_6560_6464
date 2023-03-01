@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="First exercise successfully finished, comments needs to be added for submission,">
+    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="Base classes added to project.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometries/Plane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometries/Plane.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/primitives/Point.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/primitives/Point.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/primitives/Ray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/primitives/Ray.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/primitives/Vector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/primitives/Vector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,7 +15,6 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -37,17 +31,13 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/uriel/IdeaProjects/ISE5783_6560_6464/src/geometries"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\uriel\IdeaProjects\ISE5783_6560_6464\src\geometries" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\uriel\IdeaProjects\ISE5783_6560_6464\src\test" />
       <recent name="C:\Users\uriel\IdeaProjects\ISE5783_6560_6464\src\geometries" />
@@ -70,58 +60,11 @@
       <option name="project" value="LOCAL" />
       <updated>1677506606759</updated>
     </task>
-    <task id="LOCAL-00002" summary="Class Point is finished (besides comments), started working on Vector.">
-      <created>1677511046174</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1677511046174</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Update to Polygon class.">
-      <created>1677663545987</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1677663545987</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Finished Vector class (besides comments).">
-      <created>1677666892894</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1677666892894</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Finished Vector class (besides comments).">
-      <created>1677666957662</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1677666957662</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Finished Ray class (besides comments).">
-      <created>1677667606507</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1677667606507</updated>
-    </task>
-    <task id="LOCAL-00007" summary="First exercise successfully finished, comments needs to be added for submission,">
-      <created>1677676056536</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1677676056536</updated>
-    </task>
-    <option name="localTasksCounter" value="8" />
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Base classes added to project." />
-    <MESSAGE value="Class Point is finished (besides comments), started working on Vector." />
-    <MESSAGE value="Update to Polygon class." />
-    <MESSAGE value="Finished Vector class (besides comments)." />
-    <MESSAGE value="Finished Ray class (besides comments)." />
-    <MESSAGE value="First exercise successfully finished, comments needs to be added for submission," />
-    <option name="LAST_COMMIT_MESSAGE" value="First exercise successfully finished, comments needs to be added for submission," />
+    <option name="LAST_COMMIT_MESSAGE" value="Base classes added to project." />
   </component>
 </project>
