@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="Class Point is finished (besides comments), started working on Vector.">
+    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="Update to Polygon class.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/primitives/Point.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/primitives/Point.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/primitives/Vector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/primitives/Vector.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,10 +36,14 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true"
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/uriel/IdeaProjects/ISE5783_6560_6464/src/geometries"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\uriel\IdeaProjects\ISE5783_6560_6464\src\geometries" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\uriel\IdeaProjects\ISE5783_6560_6464\src\test" />
       <recent name="C:\Users\uriel\IdeaProjects\ISE5783_6560_6464\src\geometries" />
@@ -67,12 +73,20 @@
       <option name="project" value="LOCAL" />
       <updated>1677511046174</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Update to Polygon class.">
+      <created>1677663545987</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1677663545987</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Base classes added to project." />
     <MESSAGE value="Class Point is finished (besides comments), started working on Vector." />
-    <option name="LAST_COMMIT_MESSAGE" value="Class Point is finished (besides comments), started working on Vector." />
+    <MESSAGE value="Update to Polygon class." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update to Polygon class." />
   </component>
 </project>
