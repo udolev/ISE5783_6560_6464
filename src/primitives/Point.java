@@ -14,8 +14,8 @@ public class Point {
         xyz = point;
     }
 
-    public Point substruct(Point other) {
-        return new Point(this.xyz.subtract(other.xyz));
+    public Vector subtract(Point other) {
+        return new Vector(xyz.subtract(other.xyz));
     }
 
     public Point add(Point other) {
