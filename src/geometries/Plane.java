@@ -27,6 +27,6 @@ public class Plane implements Geometry {
     }
 
     public Vector getNormal(Point p) {
-        return normal;
+        return getNormal();
     }
 }
