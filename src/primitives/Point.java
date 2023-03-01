@@ -48,7 +48,7 @@ public class Point {
         return (xyz.d1 - other.xyz.d1) * (xyz.d1 - other.xyz.d1) + (xyz.d2 - other.xyz.d2) * (xyz.d2 - other.xyz.d2) + (xyz.d3 - other.xyz.d3) * (xyz.d3 - other.xyz.d3);
     }
 
-    /** Calculate the distance between two points using the squared distance function
+    /** Calculate the distance between two points
      * @param other the point to which the squared distance is calculated
      * @return the distance between two points */
     public double distance(Point other) {

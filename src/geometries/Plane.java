@@ -2,11 +2,11 @@ package geometries;
 import primitives.Point;
 import primitives.Vector;
 /** This class will represent a plane in a 3D world.
- * It will be used to represent all flat objects in a 3D world. */
+ * It will be used to represent all flat objects. */
 public class Plane implements Geometry {
     final private Point q0;
     final private Vector normal;
-    /** Constructor to initialize Plane based object with three Point.
+    /** Constructor to initialize Plane based object with three Points
      * @param p1 first Point value
      * @param p2 second Point value
      * @param p3 third Point value */
@@ -14,9 +14,9 @@ public class Plane implements Geometry {
         normal = null;
         q0 = p1;
     }
-    /** Constructor to initialize Plane based object with a Vector and a Point.
-     * @param v the planes vector
-     * @param p the planes Point */
+    /** Constructor to initialize Plane based object with a Vector and a Point
+     * @param v the plane's vector
+     * @param p the plane's Point */
     public Plane(Point p, Vector v) {
         q0 = p;
         normal = v.normalize();

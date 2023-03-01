@@ -5,7 +5,7 @@ import primitives.Vector;
 /** This class will represent a tube in a 3D world. */
 public class Tube extends RadialGeometry {
     final private Ray axisRay;
-/** Constructor to initialize a tube with a radius and a ray. */
+    /** Constructor to initialize a tube with a radius and a ray. */
     public Tube(double radius, Ray ray) {
         super(radius);
         axisRay = ray;

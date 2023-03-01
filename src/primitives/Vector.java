@@ -62,7 +62,7 @@ public class Vector extends Point {
         return this.dotProduct(this);
     }
 
-    /** Calculate the vector length using the length squared function
+    /** Calculate the vector length
      * @return vector's length */
     public double length() {
         return Math.sqrt(lengthSquared());
