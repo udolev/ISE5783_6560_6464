@@ -27,7 +27,7 @@ class PointTest {
     void testDistanceSquared() {
     }
     /**
-     * Test method for {@link primitives.Point#distance(primitives.Point)}.
+     * Test method for {@link primitives.Point#distance(primitives.Point)}
      */
     @Test
     void testDistance() {
