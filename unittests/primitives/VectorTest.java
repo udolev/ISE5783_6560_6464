@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class VectorTest {
 
-    // Ask about subtruct test
-
     @Test
     void add() {
     }

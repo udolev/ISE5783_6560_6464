@@ -9,13 +9,12 @@ import static primitives.Util.isZero;
 
 import org.junit.jupiter.api.Test;
 
-import geometries.Polygon;
 import primitives.Point;
 import primitives.Vector;
 
 /** Testing Polygons
  * @author Dan */
-public class PolygonTests {
+public class PolygonTest {
 
    /** Test method for {@link geometries.Polygon#Polygon(primitives.Point...)}. */
    @Test
