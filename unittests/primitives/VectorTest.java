@@ -3,41 +3,57 @@ package primitives;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * Unit tests for primitives.Vector class
+ * @author natan weis
+ */
 class VectorTest {
-
-    // Ask about subtruct test
-
+    /**
+     * Test method for {@link primitives.Vector#add(primitives.Vector)}.
+     */
     @Test
-    void add() {
+    void testAdd() {
     }
-
-    // No need for reimplementation
+    /**
+     * Test method for {@link primitives.Vector#subtract(primitives.Point)}.
+     */
     @Test
-    void subtract() {
+    void testSubtract() {
     }
-
+    /**
+     * Test method for {@link primitives.Vector#scale(double)}.
+     */
     @Test
-    void scale() {
+    void testScale() {
     }
-
+    /**
+     * Test method for {@link primitives.Vector#dotProduct(primitives.Vector)}.
+     */
     @Test
-    void dotProduct() {
+    void testDotProduct() {
     }
-
+    /**
+     * Test method for {@link primitives.Vector#crossProduct(primitives.Vector)}.
+     */
     @Test
-    void crossProduct() {
+    void testCrossProduct() {
     }
-
+    /**
+     * Test method for {@link Vector#lengthSquared()}.
+     */
     @Test
-    void lengthSquared() {
+    void testLengthSquared() {
     }
-
+    /**
+     * Test method for {@link Vector#length()}.
+     */
     @Test
-    void length() {
+    void testLength() {
     }
-
+    /**
+     * Test method for {@link Vector#normalize()}.
+     */
     @Test
-    void normalize() {
+    void testNormalize() {
     }
 }
