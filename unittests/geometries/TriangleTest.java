@@ -24,16 +24,16 @@ class TriangleTest {
 
         // ============ Equivalence Partitions Tests ==============
         // TC01: There is a simple single test here for a triangle
-        Polygon pol = new Triangle(p1, p2, p3);
+        Triangle tri = new Triangle(p1, p2, p3);
         // ensure there are no exceptions
-        assertDoesNotThrow(() -> pol.getNormal(p1), "");
+        assertDoesNotThrow(() -> tri.getNormal(p1), "");
         // generate the test result
-        Vector result = pol.getNormal(p1);
+        Vector result = tri.getNormal(p1);
         // ensure |result| = 1
-        assertEquals(1, result.length(), 0.00000001, "Polygon's normal is not a unit vector");
+        assertEquals(1, result.length(), 0.00000001, "Triangle's normal is not a unit vector");
         // ensure the result is orthogonal to all the edges
-        assertTrue(isZero(result.dotProduct(p1.subtract(p2))),"Polygon's normal is not orthogonal to one of the edges");
-        assertTrue(isZero(result.dotProduct(p1.subtract(p3))),"Polygon's normal is not orthogonal to one of the edges");
-        assertTrue(isZero(result.dotProduct(p2.subtract(p3))),"Polygon's normal is not orthogonal to one of the edges");
+        assertTrue(isZero(result.dotProduct(p1.subtract(p2))),"Triangle's normal is not orthogonal to one of the edges");
+        assertTrue(isZero(result.dotProduct(p1.subtract(p3))),"Triangle's normal is not orthogonal to one of the edges");
+        assertTrue(isZero(result.dotProduct(p2.subtract(p3))),"Triangle's normal is not orthogonal to one of the edges");
     }
 }
