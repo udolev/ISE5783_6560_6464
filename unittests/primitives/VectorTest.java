@@ -13,6 +13,8 @@ class VectorTest {
      */
     @Test
     void testAdd() {
+
+
     }
     /**
      * Test method for {@link primitives.Vector#subtract(primitives.Point)}.

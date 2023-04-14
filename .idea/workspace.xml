@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="Final code for exercise 1.">
+    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="Complete javadoc for tests">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unittests/primitives/PointTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/primitives/PointTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unittests/primitives/VectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/primitives/VectorTest.java" afterDir="false" />
@@ -69,7 +69,21 @@
       <option name="project" value="LOCAL" />
       <updated>1677680525182</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL‎-00003" summary="notes added for primitives">
+      <created>1679907322054</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL‎-00003" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1679907322054</updated>
+    </task>
+    <task id="LOCAL‎-00004" summary="Complete javadoc for tests">
+      <created>1679907497962</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL‎-00004" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1679907497962</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -86,6 +100,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Base classes added to project." />
     <MESSAGE value="Final code for exercise 1." />
-    <option name="LAST_COMMIT_MESSAGE" value="Final code for exercise 1." />
+    <MESSAGE value="notes added for primitives" />
+    <MESSAGE value="Complete javadoc for tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="Complete javadoc for tests" />
   </component>
 </project>
