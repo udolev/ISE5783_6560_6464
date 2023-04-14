@@ -21,10 +21,11 @@ class SphereTest {
     void testGetNormal() {
         Point p1 = new Point(0, 0, 0);
         Point p2 = new Point(0, 0, 1);
+        double radius = 1;
 
         // ============ Equivalence Partitions Tests ==============
         // TC01: There is a simple single test here for a sphere
-        Sphere s = new Sphere(1, p1);
+        Sphere s = new Sphere(radius, p1);
         // ensure there are no exceptions
         assertDoesNotThrow(() -> s.getNormal(p2), "");
         // generate the test result
