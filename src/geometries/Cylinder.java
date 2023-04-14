@@ -33,8 +33,7 @@ public class Cylinder extends Tube {
         if (t != 0) {
             o = p0.add(v.scale(t));
         }
-        v=p.subtract(o);
+        v = p.subtract(o);
         return v.normalize();
-
     }
 }
