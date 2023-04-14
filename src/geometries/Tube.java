@@ -1,22 +1,34 @@
 package geometries;
+
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
-/** This class will represent a tube in a 3D world. */
+
+/**
+ * This class will represent a tube in a 3D world.
+ */
 public class Tube extends RadialGeometry {
-    final private Ray axisRay;
-    /** Constructor to initialize a tube with a radius and a ray. */
+    final protected Ray axisRay;
+
+    /**
+     * Constructor to initialize a tube with a radius and a ray.
+     */
     public Tube(double radius, Ray ray) {
         super(radius);
         axisRay = ray;
     }
 
-    /** Getter */
+    /**
+     * Getter
+     */
     public Ray getAxisRay() {
         return axisRay;
     }
 
     public Vector getNormal(Point p) {
-        return null;
+        Vector v = axisRay.getDir();
+        Point p0 = axisRay.getP0();
+        v=p.subtract(p0);
+        return v.normalize();
     }
 }

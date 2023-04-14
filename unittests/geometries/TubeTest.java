@@ -20,15 +20,15 @@ class TubeTest {
      */
     @Test
     void testGetNormal() {
-        Vector dir = new Vector(0,0,1);
-        Ray ray = new Ray(new Point(0,0,0), dir);
+        Vector dir = new Vector(0, 0, 1);
+        Ray ray = new Ray(new Point(0, 0, 0), dir);
         double radius = 3;
 
         // ============ Equivalence Partitions Tests ==============
         // TC01: There is a simple single test here for a tube
         Tube t = new Tube(radius, ray);
         // ensure there are no exceptions
-        Point p1 = new Point(3,0,1);
+        Point p1 = new Point(3, 0, 1);
         assertDoesNotThrow(() -> t.getNormal(p1), "");
         // generate the test result
         Vector result = t.getNormal(p1);
@@ -40,14 +40,13 @@ class TubeTest {
         // =============== Boundary Values Tests ==================
         // TC11: The point is on the bottom of the tube so (p-p0) is orthogonal to dir
         // ensure there are no exceptions
-        Point p2 = new Point(2,0,0);
+        Point p2 = new Point(3, 0, 0);
         assertDoesNotThrow(() -> t.getNormal(p2), "");
         // generate the test result
         Vector vr = t.getNormal(p2);
         // ensure |result| = 1
         assertEquals(1, vr.length(), 0.00000001, "Tube's normal is not a unit vector");
-        // ensure that the result is equal to the tube's direction vector or opposite to it
-        // since we checked the size is 1, we can check that the vectors are parallel
+        // ensure that the result is orthogonal to the tube's direction vector
         assertTrue(isZero(vr.dotProduct(dir)), "Tube's normal to a bottom point incorrect");
     }
 }
