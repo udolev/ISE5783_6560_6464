@@ -23,7 +23,7 @@ class PlaneTest {
         Point p3 = new Point(0,0,0);
 
         // ============ Equivalence Partitions Tests ==============
-        // TC01: There is a simple single test here for a triangle
+        // TC01: There is a simple single test here for a plane
         Plane plane = new Plane(p1, p2, p3);
         // ensure there are no exceptions
         assertDoesNotThrow(() -> plane.getNormal(p1), "");
@@ -31,10 +31,9 @@ class PlaneTest {
         Vector result = plane.getNormal(p1);
         // ensure |result| = 1
         assertEquals(1, result.length(), 0.00000001, "Plane's normal is not a unit vector");
-        // ensure the result is orthogonal to all the edges
-        assertTrue(isZero(result.dotProduct(p1.subtract(p2))),"Plane's normal is not orthogonal to one of the edges");
-        assertTrue(isZero(result.dotProduct(p1.subtract(p3))),"Plane's normal is not orthogonal to one of the edges");
-        assertTrue(isZero(result.dotProduct(p2.subtract(p3))),"Plane's normal is not orthogonal to one of the edges");
-
+        // ensure the result is orthogonal to all the plane's direction vectors
+        assertTrue(isZero(result.dotProduct(p1.subtract(p2))),"Plane's normal is not orthogonal to one of the direction vectors");
+        assertTrue(isZero(result.dotProduct(p1.subtract(p3))),"Plane's normal is not orthogonal to one of the direction vectors");
+        assertTrue(isZero(result.dotProduct(p2.subtract(p3))),"Plane's normal is not orthogonal to one of the direction vectors");
     }
 }
