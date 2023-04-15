@@ -28,12 +28,20 @@ public class Cylinder extends Tube {
     public Vector getNormal(Point p) {
         Vector v = axisRay.getDir();
         Point p0 = axisRay.getP0();
-        double t = v.dotProduct(p.subtract(p0));
-        Point o = p0;
-        if (t != 0) {
-            o = p0.add(v.scale(t));
+        // in case of the center point we'll return the direction vector
+        if (p.equals(p0)) {
+            return v;
+        } else {
+            double t = v.dotProduct(p.subtract(p0));
+            Point o = p0;
+            // if the point is on one of the bases
+            if (t == 0 || t == height) { // we decided that if it is on the base circle (the edge of the base), the normal will be the base normal
+                return v;
+            } else {
+                o = p0.add(v.scale(t));
+            }
+            Vector n = p.subtract(o);
+            return n.normalize();
         }
-        v = p.subtract(o);
-        return v.normalize();
     }
 }

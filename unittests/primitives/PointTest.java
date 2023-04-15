@@ -19,7 +19,8 @@ class PointTest {
         // the classic case
         Point p1 = new Point(1, 2, 3);
         Point p2 = new Point(-3, -6, 4);
-        assertEquals(new Vector(4, 8, -1), p1.subtract(p2));
+        assertEquals(new Vector(4, 8, -1), p1.subtract(p2), "Point's subtract() result is wrong");
+
         // =============== Boundary Values Tests ==================
         //subtraction equals vector zero
         assertThrows(IllegalArgumentException.class, () -> p1.subtract(p1), "Constructed a zero vector");
@@ -34,11 +35,12 @@ class PointTest {
         // the classic case
         Point p1 = new Point(1, 2, 3);
         Point p2 = new Point(-3, -6, 4);
-        assertEquals(new Vector(4, 8, -1), p1.subtract(p2));
+        assertEquals(new Point(-2, -4, 7), p1.add(p2), "Point's add() result is wrong");
+
         // =============== Boundary Values Tests ==================
-        //result equals vector zero
+        // result equals point zero
         Point p3 = new Point(-1, -2, -3);
-        assertThrows(IllegalArgumentException.class, () -> p3.subtract(p1), "Constructed a zero vector");
+        assertEquals(new Point(0, 0, 0), p1.add(p3), "Point + -itself doesn't equal zero point");
     }
 
     /**
