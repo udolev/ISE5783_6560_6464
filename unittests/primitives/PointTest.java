@@ -52,7 +52,12 @@ class PointTest {
         // the classic case
         Point p1 = new Point(1, 2, 3);
         Point p2 = new Point(-3, -6, 4);
-        assertEquals(81, p1.distanceSquared(p2),0.0000001,"distanceSquared wrong result");
+        assertEquals(81, p1.distanceSquared(p2), 0.0000001, "distanceSquared wrong result");
+
+        // =============== Boundary Values Tests ==================
+        // distance from a point to itself
+        Point p = new Point(1, 1, 1);
+        assertEquals(0, p.distanceSquared(p), 0.0000001, "squaredDistance from a point to itself isn't zero");
     }
 
     /**
@@ -64,6 +69,11 @@ class PointTest {
         // the classic case
         Point p1 = new Point(1, 2, 3);
         Point p2 = new Point(-3, -6, 4);
-        assertEquals(9, p1.distance(p2),0.0000001,"distance wrong result");
+        assertEquals(9, p1.distance(p2), 0.0000001, "distance wrong result");
+
+        // =============== Boundary Values Tests ==================
+        // distance from a point to itself
+        Point p = new Point(1, 1, 1);
+        assertEquals(0, p.distance(p), 0.0000001, "distance from a point to itself isn't zero");
     }
 }

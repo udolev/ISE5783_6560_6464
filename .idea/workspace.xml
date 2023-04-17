@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="Finished Cylinder tests. Only thing left is Vector tests.">
+    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="All tests passed. Final code for exercise 2.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometries/Cylinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometries/Cylinder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometries/Tube.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometries/Tube.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unittests/primitives/PointTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/primitives/PointTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unittests/primitives/VectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/primitives/VectorTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +120,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681484836590</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="All tests passed. Final code for exercise 2.">
+      <created>1681597147874</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1681597147874</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -143,6 +147,7 @@
     <MESSAGE value="notes added for primitives" />
     <MESSAGE value="Complete javadoc for tests" />
     <MESSAGE value="Finished Cylinder tests. Only thing left is Vector tests." />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished Cylinder tests. Only thing left is Vector tests." />
+    <MESSAGE value="All tests passed. Final code for exercise 2." />
+    <option name="LAST_COMMIT_MESSAGE" value="All tests passed. Final code for exercise 2." />
   </component>
 </project>
