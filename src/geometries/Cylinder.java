@@ -4,6 +4,8 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.List;
+
 /**
  * This class will represent a cylinder in a 3D world.
  */
@@ -25,6 +27,7 @@ public class Cylinder extends Tube {
         return height;
     }
 
+    @Override
     public Vector getNormal(Point p) {
         Vector v = axisRay.getDir();
         Point p0 = axisRay.getP0();
@@ -38,10 +41,12 @@ public class Cylinder extends Tube {
             if (t == 0 || t == height) { // we decided that if it is on the base circle (the edge of the base), the normal will be the base normal
                 return v;
             } else {
-                o = p0.add(v.scale(t));
+                return super.getNormal(p);
             }
-            Vector n = p.subtract(o);
-            return n.normalize();
         }
     }
+
+    @Override
+    public List<Point> findIntsersections(Ray ray) { return null; }
 }
+

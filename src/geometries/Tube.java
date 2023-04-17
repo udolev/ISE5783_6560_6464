@@ -4,6 +4,8 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.List;
+
 /**
  * This class will represent a tube in a 3D world.
  */
@@ -25,6 +27,7 @@ public class Tube extends RadialGeometry {
         return axisRay;
     }
 
+    @Override
     public Vector getNormal(Point p) {
         Vector v = axisRay.getDir();
         Point p0 = axisRay.getP0();
@@ -36,4 +39,7 @@ public class Tube extends RadialGeometry {
         Vector n = p.subtract(o);
         return n.normalize();
     }
+
+    @Override
+    public List<Point> findIntsersections(Ray ray) { return null; }
 }

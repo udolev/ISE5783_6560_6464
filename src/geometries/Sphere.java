@@ -1,7 +1,10 @@
 package geometries;
 
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
 
 /**
  * This class will represent a sphere in a 3D world.
@@ -24,8 +27,12 @@ public class Sphere extends RadialGeometry {
         return center;
     }
 
+    @Override
     public Vector getNormal(Point p) {
         Vector v = p.subtract(center);
         return v.normalize();
     }
+
+    @Override
+    public List<Point> findIntsersections(Ray ray) { return null; }
 }
