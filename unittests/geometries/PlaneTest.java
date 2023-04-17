@@ -3,6 +3,7 @@ package geometries;
 import org.junit.jupiter.api.Test;
 import primitives.Double3;
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,5 +63,11 @@ class PlaneTest {
         assertTrue(isZero(result.dotProduct(p1.subtract(p2))), "Plane's normal is not orthogonal to one of the edges");
         assertTrue(isZero(result.dotProduct(p1.subtract(p3))), "Plane's normal is not orthogonal to one of the edges");
         assertTrue(isZero(result.dotProduct(p2.subtract(p3))), "Plane's normal is not orthogonal to one of the edges");
+    }
+    /**
+     * Test method for {@link geometries.Plane#findIntersections(Ray)}.
+     */
+    @Test
+    void testFindIntersections(Ray ray) {
     }
 }

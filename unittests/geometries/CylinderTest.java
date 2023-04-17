@@ -83,4 +83,14 @@ class CylinderTest {
         // ensure that the result is orthogonal to the tube's direction vector
         assertThrows(IllegalArgumentException.class, () -> vr2.crossProduct(dir), "Cylinder's normal to upper base center point is not parallel to its ray's direction vector");
     }
+
+    /**
+     * Test method for {@link geometries.Cylinder#findIntersections(Ray)}.
+     */
+    @Test
+    void testFindIntersections(Ray ray) {
+
+
+    }
+
 }

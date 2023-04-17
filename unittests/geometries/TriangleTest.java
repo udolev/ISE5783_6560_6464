@@ -2,6 +2,7 @@ package geometries;
 
 import org.junit.jupiter.api.Test;
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,5 +36,11 @@ class TriangleTest {
         assertTrue(isZero(result.dotProduct(p1.subtract(p2))),"Triangle's normal is not orthogonal to one of the edges");
         assertTrue(isZero(result.dotProduct(p1.subtract(p3))),"Triangle's normal is not orthogonal to one of the edges");
         assertTrue(isZero(result.dotProduct(p2.subtract(p3))),"Triangle's normal is not orthogonal to one of the edges");
+    }
+    /**
+     * Test method for {@link geometries.Triangle#findIntersections(Ray)}.
+     */
+    @Test
+    void testFindIntersections(Ray ray) {
     }
 }

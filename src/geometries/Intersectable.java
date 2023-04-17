@@ -9,5 +9,5 @@ import java.util.List;
 public interface Intersectable {
     /** The function will return the intersaction points between a ray and an intersectable.
      * @param ray the ray of which we will find the intersections. */
-    List<Point> findIntsersections(Ray ray);
+    List<Point> findIntersections(Ray ray);
 }
