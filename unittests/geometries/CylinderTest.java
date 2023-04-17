@@ -89,8 +89,7 @@ class CylinderTest {
      */
     @Test
     void testFindIntersections(Ray ray) {
-
-
+        
     }
 
 }
