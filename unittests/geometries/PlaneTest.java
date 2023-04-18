@@ -6,6 +6,8 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static primitives.Util.isZero;
 
@@ -34,11 +36,11 @@ class PlaneTest {
 
         // =============== Boundary Values Tests ==================
         // TC11: two of the points are the same point
-        Point p = new Point(1,1,1);
-        assertThrows(IllegalArgumentException.class, () -> new Plane(p,p,p1), "plane construction failed due to two of the points being the same");
+        Point p = new Point(1, 1, 1);
+        assertThrows(IllegalArgumentException.class, () -> new Plane(p, p, p1), "plane construction failed due to two of the points being the same");
         // TC12: all of the points are on the same straight line
-        Point p4 = new Point(0,0,2);
-        assertThrows(IllegalArgumentException.class, () -> new Plane(p1,p3,p4), "plane construction failed due to all of the points being on the same line");
+        Point p4 = new Point(0, 0, 2);
+        assertThrows(IllegalArgumentException.class, () -> new Plane(p1, p3, p4), "plane construction failed due to all of the points being on the same line");
     }
 
     /**
@@ -64,10 +66,38 @@ class PlaneTest {
         assertTrue(isZero(result.dotProduct(p1.subtract(p3))), "Plane's normal is not orthogonal to one of the edges");
         assertTrue(isZero(result.dotProduct(p2.subtract(p3))), "Plane's normal is not orthogonal to one of the edges");
     }
+
     /**
      * Test method for {@link geometries.Plane#findIntersections(Ray)}.
      */
     @Test
-    void testFindIntersections(Ray ray) {
+    void testFindIntersections() {
+        // ============ Equivalence Partitions Tests ==============
+        // TC01 Ray intersects the plane (1 point)
+        Point p1 = new Point(1.176470588235294, 0, 1.411764705882353);
+        Plane plane = new Plane(new Point(0, 0, 0), new Point(1, 0, 1), new Point(4, 7, 1));
+        List<Point> result = plane.findIntersections(new Ray(new Point(4, 0, 0), new Vector(-2, 0, 1)));
+        assertEquals(List.of(p1), result, "Ray crosses plane");
+        // TC02 Ray does not intersect with the plane (0 points)
+        assertNull(plane.findIntersections(new Ray(new Point(4, 0, 0), new Vector(2, 0, 1))), "Ray does not cross the plane");
+        // =============== Boundary Values Tests ==================
+        // **** Group: Ray is parallel to the plane
+        //TC03 ray is not included in the plane (0 points)
+        assertNull(plane.findIntersections(new Ray(new Point(4, 0, 0), new Vector(0, 1, -1))), "Ray is parallel to the plane");
+        //TC04 ray is included in the plane (0 points)
+        assertNull(plane.findIntersections(new Ray(new Point(1, 1, 0), new Vector(0, 1, -1))), "Ray is included in the plane");
+        // **** Group: Ray is orthogonal to the plane
+        //TC05 p0 is on the plane (0 points)
+        assertNull(plane.findIntersections(new Ray(new Point(1, 1, 0), new Vector(-7, 3, 3))), "Ray is orthogonal to the plane and starts at it");
+        //TC06 the ray stars after the plane(0 points)
+        assertNull(plane.findIntersections(new Ray(new Point(-3, 2, 0), new Vector(-7, 3, 3))), "Ray is orthogonal to the plane and starts after it");
+        //TC07 the ray starts before thr plane (1 point)
+        result = plane.findIntersections(new Ray(new Point(5, 2, 0), new Vector(-7, 3, 3)));
+        assertEquals(List.of(p1), result, "Ray is orthogonal to the plane and starts before it");
+        //TC08 the ray is not orthogonal nor parallel to plane and stars at it (0 points)
+        assertNull(plane.findIntersections(new Ray(new Point(1, 0, 1), new Vector(7, 3, 3))), "ray is not orthogonal nor parallel to plane and stars at it ");
+        //TC09 Ray is neither orthogonal nor parallel to the plane and begins in
+        //the same point which appears as reference point in the plane(p0) (0 points)
+        assertNull(plane.findIntersections(new Ray(new Point(1, 1, 0), new Vector(7, 3, 3))), "ray is not orthogonal nor parallel to plane and stars at its reference point(p0) ");
     }
 }
