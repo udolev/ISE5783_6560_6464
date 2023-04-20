@@ -62,7 +62,7 @@ class TriangleTest {
         // =============== Boundary Values Tests ==================
         // TC11: intersection point is on a triangle's vertex (0 points)
         assertNull(triangle.findIntersections(new Ray(new Point(-1, -1, -1), new Vector(2, 1, 1))),
-                "Ray crosses the triangle at an vertex");
+                "Ray crosses the triangle at a vertex");
         // TC12: intersection point is on a triangle's edge (0 points)
         assertNull(triangle.findIntersections(new Ray(new Point(-1, -1, -1), new Vector(1.5, 1, 1.5))),
                 "Ray crosses a triangle's edge");

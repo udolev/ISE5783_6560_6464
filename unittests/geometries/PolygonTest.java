@@ -1,10 +1,6 @@
 package geometries;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static primitives.Util.isZero;
 
 import org.junit.jupiter.api.Test;
@@ -12,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
 
 /** Testing Polygons
  * @author Dan */
@@ -89,5 +87,24 @@ public class PolygonTest {
     */
    @Test
    void testFindIntersections() {
+      Point[] pts = {new Point(1,-1,2),new Point(-1,-1,2),new Point(-1,1,2),new Point(1,1,2)};
+      Polygon polygon = new Polygon(pts);
+      // ============ Equivalence Partitions Tests ==============
+      // TC01: intersection point is inside the Polygon (1 point)
+      Point p = new Point(0,0.5,2);
+      List<Point> result = polygon.findIntersections(new Ray(new Point(0, 0.5, 0), new Vector(0, 0, 1)));
+      assertEquals(1, result.size(), "Wrong number of points");
+      assertEquals(List.of(p), result, "Ray crosses Polygon inside of it");
+      // TC02: intersection point is outside against vertex (0 points)
+      assertNull(polygon.findIntersections(new Ray(new Point(2, 2, 0), new Vector(0, 0, 1))), "Ray crosses the polygon's plane against a vertex");
+      // TC03: intersection point is outside against edge (0 points)
+      assertNull(polygon.findIntersections(new Ray(new Point(0, 2, 0), new Vector(0, 0, 1))), "Ray crosses the polygon's plane against an edge");
+      // =============== Boundary Values Tests ==================
+      // TC11: intersection point is on a polygon's vertex (0 points)
+      assertNull(polygon.findIntersections(new Ray(new Point(1, 1, 0), new Vector(0, 0, 1))),  "Ray crosses the polygon at a vertex");
+      // TC12: intersection point is on a polygon's edge (0 points)
+      assertNull(polygon.findIntersections(new Ray(new Point(1, 0, 0), new Vector(0, 0, 1))), "Ray crosses a polygon's edge");
+      // TC13: intersection point is on a polygon's edge line (0 points)
+      assertNull(polygon.findIntersections(new Ray(new Point(2, 1, 0), new Vector(0, 0, 1))), "Ray crosses the polygon's plane at a edge's line");
    }
 }
