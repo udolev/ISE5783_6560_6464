@@ -4,17 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="Small fixes">
+    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="Finished writing findIntersection functions for plane, triangle and sphere. Need to write: polygon, cylinder. FindIntersection Tests: plane - works completely, sphere - works completely, triangle - works besides one precision problem, polygon - need to write, cylinder - need to write.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometries/Plane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometries/Plane.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometries/Sphere.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometries/Sphere.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/geometries/Triangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometries/Triangle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/primitives/Ray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/primitives/Ray.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unittests/geometries/CylinderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/geometries/CylinderTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unittests/geometries/PlaneTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/geometries/PlaneTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unittests/geometries/PolygonTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/geometries/PolygonTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unittests/geometries/SphereTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/geometries/SphereTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unittests/geometries/TriangleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/geometries/TriangleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/primitives/Vector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/primitives/Vector.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -221,7 +214,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681824316237</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Finished writing findIntersection functions for plane, triangle and sphere. Need to write: polygon, cylinder. FindIntersection Tests: plane - works completely, sphere - works completely, triangle - works besides one precision problem, polygon - need to write, cylinder - need to write.">
+      <created>1681988808776</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1681988808776</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -246,6 +246,7 @@
     <MESSAGE value="Started sphere intersections tests." />
     <MESSAGE value="Finished sphere intersections tests." />
     <MESSAGE value="Small fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Small fixes" />
+    <MESSAGE value="Finished writing findIntersection functions for plane, triangle and sphere. Need to write: polygon, cylinder. FindIntersection Tests: plane - works completely, sphere - works completely, triangle - works besides one precision problem, polygon - need to write, cylinder - need to write." />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished writing findIntersection functions for plane, triangle and sphere. Need to write: polygon, cylinder. FindIntersection Tests: plane - works completely, sphere - works completely, triangle - works besides one precision problem, polygon - need to write, cylinder - need to write." />
   </component>
 </project>

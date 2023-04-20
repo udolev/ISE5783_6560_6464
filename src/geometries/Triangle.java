@@ -51,6 +51,7 @@ public class Triangle extends Polygon {
         if (n1.dotProduct(n2) > 0 && n1.dotProduct(n3) > 0 && n2.dotProduct(n3) > 0) {
             return List.of(p);
         }
+
         return null;
     }
 }
