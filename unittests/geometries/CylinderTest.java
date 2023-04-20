@@ -88,7 +88,7 @@ class CylinderTest {
      * Test method for {@link geometries.Cylinder#findIntersections(Ray)}.
      */
     @Test
-    void testFindIntersections(Ray ray) {
+    void testFindIntersections() {
         
     }
 

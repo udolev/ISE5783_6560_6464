@@ -1,13 +1,18 @@
 package primitives;
 
-/** This will represent a ray in a 3D world.
+import static primitives.Util.isZero;
+
+/**
+ * This will represent a ray in a 3D world.
  * A ray will be represented by a head point and a direction vector.
  */
 public class Ray {
     final private Point p0;
     final private Vector dir;
 
-    /** Constructor to initialize Ray object with its head point and direction vector
+    /**
+     * Constructor to initialize Ray object with its head point and direction vector
+     *
      * @param p head of the ray
      * @param v direction of the ray
      */
@@ -35,5 +40,11 @@ public class Ray {
     @Override
     public String toString() {
         return "p0=" + p0 + ", dir=" + dir;
+    }
+
+    public Point getPoint(double t) {
+        if (isZero(t))
+            return p0;
+        return p0.add(dir.scale(t));
     }
 }

@@ -88,6 +88,6 @@ public class PolygonTest {
     * Test method for {@link geometries.Polygon#findIntersections(Ray)}.
     */
    @Test
-   void testFindIntersections(Ray ray) {
+   void testFindIntersections() {
    }
 }

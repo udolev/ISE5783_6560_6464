@@ -6,6 +6,8 @@ import primitives.Vector;
 
 import java.util.List;
 
+import static primitives.Util.*;
+
 /**
  * This class will represent a plane in a 3D world.
  * It will be used to represent all flat objects.
@@ -67,5 +69,22 @@ public class Plane implements Geometry {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) { return null; }
+    public List<Point> findIntersections(Ray ray) {
+        Vector v = ray.getDir();
+        Point p0 = ray.getP0();
+        double nv = normal.dotProduct(v);
+        // ray is parallel to the plane or p0 is q0 (to prevent zero vector)
+        if (isZero(nv) || q0.equals(p0)) {
+            return null;
+        }
+
+        double nQMinusP0 = normal.dotProduct(q0.subtract(p0));
+        double t = alignZero(nQMinusP0 / nv);
+        // ray's p0 is on the plane or the ray's direction vector is pointed at the other direction of the plane
+        if (isZero(t) || t < 0) {
+            return null;
+        }
+
+        return List.of(ray.getPoint(t));
+    }
 }
