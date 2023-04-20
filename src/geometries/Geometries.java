@@ -26,6 +26,7 @@ public class Geometries implements Intersectable {
     }
 
     public List<Point> findIntersections(Ray ray) {
+        // Firstly, we check that there are any intersections
         Boolean isIntersected = Boolean.FALSE;
         for (Intersectable intersectable : intersectables) {
             if (!(intersectable.findIntersections(ray) == null))
