@@ -88,11 +88,11 @@ class PlaneTest {
         assertNull(plane.findIntersections(new Ray(new Point(4, 7, 1), new Vector(1, -1, 1))), "Ray is included in the plane");
         // **** Group: Ray is orthogonal to the plane
         // TC13: p0 is on the plane (0 points)
-        assertNull(plane.findIntersections(new Ray(new Point(4,7, 1), new Vector(-7, 3, 10))), "Ray is orthogonal to the plane and starts at it");
+        assertNull(plane.findIntersections(new Ray(new Point(4, 7, 1), new Vector(-7, 3, 10))), "Ray is orthogonal to the plane and starts at it");
         // TC14: the ray stars after the plane (0 points)
         assertNull(plane.findIntersections(new Ray(new Point(-10, 2, 0), new Vector(-7, 3, 10))), "Ray is orthogonal to the plane and starts after it");
         // TC15: the ray starts before thr plane (1 point)
-        p1 = new Point(7.0316455696202524,3.2721518987341773,4.240506329113924);
+        p1 = new Point(7.0316455696202524, 3.2721518987341773, 4.240506329113924);
         result = plane.findIntersections(new Ray(new Point(10, 2, 0), new Vector(-7, 3, 10)));
         assertEquals(List.of(p1), result, "Ray is orthogonal to the plane and starts before it");
         // TC16: the ray is not orthogonal nor parallel to plane and stars at it (0 points)

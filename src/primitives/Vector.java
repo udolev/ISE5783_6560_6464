@@ -62,7 +62,7 @@ public class Vector extends Point {
      * @return result of dot product (a number)
      */
     public double dotProduct(Vector other) {
-        return xyz.d1 * other.xyz.d1 + xyz.d2 * other.xyz.d2 + xyz.d3 * other.xyz.d3;
+        return alignZero(xyz.d1 * other.xyz.d1 + xyz.d2 * other.xyz.d2 + xyz.d3 * other.xyz.d3);
     }
 
     /**

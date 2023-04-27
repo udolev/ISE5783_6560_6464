@@ -6,6 +6,8 @@ import primitives.Vector;
 
 import java.util.List;
 
+import static primitives.Util.isZero;
+
 /**
  * This class will represent a cylinder in a 3D world.
  */
@@ -38,7 +40,7 @@ public class Cylinder extends Tube {
             double t = v.dotProduct(p.subtract(p0));
             Point o = p0;
             // if the point is on one of the bases
-            if (t == 0 || t == height) { // we decided that if it is on the base circle (the edge of the base), the normal will be the base normal
+            if (isZero(t) || t == height) { // we decided that if it is on the base circle (the edge of the base), the normal will be the base normal
                 return v;
             } else {
                 return super.getNormal(p);

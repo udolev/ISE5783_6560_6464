@@ -100,12 +100,14 @@ public class Polygon implements Geometry {
         if (intersect == null)
             return null;
         Point p = intersect.get(0);
+
         // check if the intersection point is inside the polygon
         LinkedList<Vector> V = new LinkedList<Vector>();
         for (int i = 0; i < size - 1; i++) {
             V.add(vertices.get(i + 1).subtract(vertices.get(i)));
         }
         V.add(vertices.get(0).subtract(vertices.get(size - 1)));
+
         // check if the intersection point is on a vertex
         for (int i = 0; i < size; i++)
             if (vertices.get(i) == p)
@@ -118,6 +120,7 @@ public class Polygon implements Geometry {
         } catch (IllegalArgumentException e) {
             return null;
         }
+
         boolean check = true;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++)
@@ -126,6 +129,7 @@ public class Polygon implements Geometry {
                         check = false;
                     }
         }
+        
         if (check)
             return List.of(p);
         return null;
