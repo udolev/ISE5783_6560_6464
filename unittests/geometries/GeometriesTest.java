@@ -42,7 +42,7 @@ class GeometriesTest {
         result = geometries.findIntersections(new Ray(new Point(5, 0, 0), new Vector(-1, -20, 0.5)));
         // ensure that |result| = 1 (sphere - 0, triangle - 0, plane - 1)
         assertEquals(1, result.size(), "Wrong number of intersections");
-        // TC14: all of the shapes are intersected
+        // TC14: all the shapes are intersected
         result = geometries.findIntersections(new Ray(new Point(5, 0, 0), new Vector(-2, -0.5, 0)));
         // ensure that |result| = 4 (sphere - 2, triangle - 1, plane - 1)
         assertEquals(4, result.size(), "Wrong number of intersections");
