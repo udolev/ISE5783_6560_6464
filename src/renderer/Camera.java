@@ -61,14 +61,14 @@ public class Camera {
         this.distance = distance;
         return this;
     }
-
+    
     /**
      * A method to create a ray that starts at the camera and goes through a specific pixel.
      *
      * @param nX the size of the VP's columns.
      * @param nY the size of the VP's rows.
      * @param j the pixel's column.
-     * @param i the pixel's
+     * @param i the pixel's row.
      **/
     public Ray constructRay(int nX, int nY, int j, int i) {
         return null;

@@ -26,19 +26,14 @@ public class Geometries implements Intersectable {
     }
 
     public List<Point> findIntersections(Ray ray) {
-        // Firstly, we check that there are any intersections
-        Boolean isIntersected = Boolean.FALSE;
+        List<Point> lst = null;
         for (Intersectable intersectable : intersectables) {
-            if (!(intersectable.findIntersections(ray) == null))
-                isIntersected = Boolean.TRUE;
+            List<Point> p = intersectable.findIntersections(ray);
+            if (p != null) {
+                if (lst == null) lst = new LinkedList<>();
+                lst.addAll(p);
+            }
         }
-        if (!isIntersected)
-            return null;
-        List<Point> intersections = new LinkedList<Point>();
-        for (Intersectable intersectable : intersectables) {
-            if (!(intersectable.findIntersections(ray) == null))
-                intersections.addAll(intersectable.findIntersections(ray));
-        }
-        return intersections;
+        return lst;
     }
 }
