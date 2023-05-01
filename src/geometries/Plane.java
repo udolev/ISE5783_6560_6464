@@ -27,7 +27,7 @@ public class Plane implements Geometry {
         if (p1.equals(p2) || p1.equals(p3) || p2.equals(p3)) {
             throw new IllegalArgumentException("plane construction failed due to two of the points being the same");
         }
-        // we'll check if all of the points are on the same straight line by checking if two of the vectors
+        // we'll check if all the points are on the same straight line by checking if two of the vectors
         // constructed by subtracting two of the points are parallel
         Vector v1 = p1.subtract(p2);
         Vector v2 = p1.subtract(p3);
