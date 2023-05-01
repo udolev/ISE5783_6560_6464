@@ -30,13 +30,13 @@ public class Camera {
      * @param vu height direction vector.
      * @param vt width direction vector.
      **/
-    public Camera(Point p, Vector vu, Vector vt) {
+    public Camera(Point p, Vector vt, Vector vu) {
         p0 = p;
         if (!isZero(vu.dotProduct(vt))) {
             throw new IllegalArgumentException("vUp isn't orthogonal to vTo");
         }
-        vUp = vu.normalize();
         vTo = vt.normalize();
+        vUp = vu.normalize();
         vRight = (vTo.crossProduct(vUp)).normalize();
     }
 
@@ -58,20 +58,32 @@ public class Camera {
      * @param distance view plane's distance.
      **/
     public Camera setVPDistance(double distance) {
+        if(isZero(distance))
+            throw new IllegalArgumentException("distance can't be zero");
         this.distance = distance;
         return this;
     }
-
+    
     /**
      * A method to create a ray that starts at the camera and goes through a specific pixel.
      *
      * @param nX the size of the VP's columns.
      * @param nY the size of the VP's rows.
      * @param j the pixel's column.
-     * @param i the pixel's
+     * @param i the pixel's row.
      **/
     public Ray constructRay(int nX, int nY, int j, int i) {
-        return null;
+        Point pCenter = p0.add(vTo.scale(distance));
+        double Ry = height / nY;
+        double Rx = width / nX;
+        double yI = -(i - ((nY - 1) / 2.0)) * Ry;
+        double xJ = (j - ((nX - 1) / 2.0)) * Rx;
+
+        Point pIJ = pCenter;
+        if (xJ != 0) pIJ = pIJ.add(vRight.scale(xJ));
+        if (yI != 0) pIJ = pIJ.add(vUp.scale(yI));
+
+        return new Ray(p0, pIJ.subtract(p0));
     }
 
     /**
