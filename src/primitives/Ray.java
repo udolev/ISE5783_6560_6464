@@ -50,6 +50,12 @@ public class Ray {
         return p0.add(dir.scale(t));
     }
 
+    /**
+     * The function finds the closest point to the head ray out of a list of points.
+     *
+     * @param points list of points from which we will find the closest.
+     * @return the closest point to the head of the ray.
+     */
     public Point findClosestPoint(List<Point> points) {
         if (points == null)
             return null;

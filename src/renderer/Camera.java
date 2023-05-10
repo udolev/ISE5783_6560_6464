@@ -1,8 +1,11 @@
 package renderer;
 
+import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
+import java.util.MissingResourceException;
 
 import static primitives.Util.isZero;
 
@@ -22,6 +25,20 @@ public class Camera {
     private double width;
     // the distance between the camera and the view plane
     private double distance;
+
+    private ImageWriter imageWriter;
+    private RayTracerBase rayTracer;
+
+    // Setters
+    public Camera setImageWriter(ImageWriter imageWriter) {
+        this.imageWriter = imageWriter;
+        return this;
+    }
+
+    public Camera setRayTracer(RayTracerBase rayTracer) {
+        this.rayTracer = rayTracer;
+        return this;
+    }
 
     /**
      * Constructor to initialize the camera with its location point and two direction vectors.
@@ -58,19 +75,19 @@ public class Camera {
      * @param distance view plane's distance.
      **/
     public Camera setVPDistance(double distance) {
-        if(isZero(distance))
+        if (isZero(distance))
             throw new IllegalArgumentException("distance can't be zero");
         this.distance = distance;
         return this;
     }
-    
+
     /**
      * A method to create a ray that starts at the camera and goes through a specific pixel.
      *
      * @param nX the size of the VP's columns.
      * @param nY the size of the VP's rows.
-     * @param j the pixel's column.
-     * @param i the pixel's row.
+     * @param j  the pixel's column.
+     * @param i  the pixel's row.
      **/
     public Ray constructRay(int nX, int nY, int j, int i) {
         Point pCenter = p0.add(vTo.scale(distance));
@@ -89,7 +106,6 @@ public class Camera {
     /**
      * Getter to receive the view plane's height.
      **/
-    // Getters
     public double getHeight() {
         return height;
     }
@@ -106,5 +122,44 @@ public class Camera {
      **/
     public double getDistance() {
         return distance;
+    }
+
+    public void renderImage() {
+        if (p0 == null || vUp == null || vTo == null || vRight == null || height == 0 || width == 0 || imageWriter == null || rayTracer == null)
+            throw new MissingResourceException("A resource is missing", "", "");
+
+        int nX = imageWriter.getNx();
+        int nY = imageWriter.getNy();
+        Color pixleColor;
+        for (int j = 0; j < nX; ++j)
+            for (int i = 0; i < nY; ++i) {
+                pixleColor = castRay(j, i);
+                imageWriter.writePixel(j, i, pixleColor);
+            }
+    }
+
+    public void printGrid(int interval, Color color) {
+        if (imageWriter == null)
+            throw new MissingResourceException("ImageWriter missing", "ImageWriter", "imageWriter");
+        int nX = imageWriter.getNx();
+        int nY = imageWriter.getNy();
+        for (int j = 0; j < nX; ++j)
+            for (int i = 0; i < nY; ++i)
+                if (j % interval == 0 || i % interval == 0)
+                    imageWriter.writePixel(j, i, color);
+
+        imageWriter.writeToImage();
+    }
+
+    public void writeToImage() {
+        if (imageWriter == null)
+            throw new MissingResourceException("ImageWriter missing", "ImageWriter", "imageWriter");
+
+        imageWriter.writeToImage();
+    }
+
+    private Color castRay(int xIndex, int yIndex) {
+        Ray ray = constructRay(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
+        return rayTracer.traceRay(ray);
     }
 }

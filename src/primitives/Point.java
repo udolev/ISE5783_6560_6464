@@ -9,6 +9,9 @@ public class Point {
     /** Coordinates of the point */
     final protected Double3 xyz;
 
+    /** Zero point (0,0,0) */
+    public static final Point ZERO = new Point(0, 0, 0);
+
     /** Constructor to initialize Point based object with its three coordinate values
      * @param x first coordinate value.
      * @param y second coordinate value.
