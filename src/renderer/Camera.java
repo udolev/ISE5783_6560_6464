@@ -7,7 +7,7 @@ import primitives.Vector;
 import static primitives.Util.isZero;
 
 /**
- * this class weil represent the camera, the tool we will use to construct rays in order
+ * This class will represent the camera, the tool we will use to construct rays in order
  * to find intersection points with 3d objects
  */
 public class Camera {
