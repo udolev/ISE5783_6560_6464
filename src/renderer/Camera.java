@@ -123,7 +123,9 @@ public class Camera {
     public double getDistance() {
         return distance;
     }
-
+    /**
+     * A method to generate a color for every pixel in th view plane.
+     **/
     public void renderImage() {
         if (p0 == null || vUp == null || vTo == null || vRight == null || height == 0 || width == 0 || imageWriter == null || rayTracer == null)
             throw new MissingResourceException("A resource is missing", "", "");
@@ -137,7 +139,12 @@ public class Camera {
                 imageWriter.writePixel(j, i, pixleColor);
             }
     }
-
+    /**
+     * A method to create the background grid to the picture.
+     *
+     * @param interval the size of each hex in the grid.
+     * @param color the color of the line of the grid.
+     **/
     public void printGrid(int interval, Color color) {
         if (imageWriter == null)
             throw new MissingResourceException("ImageWriter missing", "ImageWriter", "imageWriter");
@@ -150,14 +157,19 @@ public class Camera {
 
         imageWriter.writeToImage();
     }
-
+    /**
+     * A method that will activate the method WriteToImage from "imageWriter
+     **/
     public void writeToImage() {
         if (imageWriter == null)
             throw new MissingResourceException("ImageWriter missing", "ImageWriter", "imageWriter");
 
         imageWriter.writeToImage();
     }
-
+    /**
+     * A method to generate a color for each pixel..
+     *
+     **/
     private Color castRay(int xIndex, int yIndex) {
         Ray ray = constructRay(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
         return rayTracer.traceRay(ray);
