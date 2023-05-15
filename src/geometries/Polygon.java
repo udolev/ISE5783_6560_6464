@@ -94,12 +94,12 @@ public class Polygon extends Geometry {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         // find intersection with the polygon's plane
-        List<Point> intersect = plane.findIntersections(ray);
+        List<GeoPoint> intersect = plane.findGeoIntersectionsHelper(ray);
         if (intersect == null)
             return null;
-        Point p = intersect.get(0);
+        Point p = intersect.get(0).point;
 
         // check if the intersection point is inside the polygon
         LinkedList<Vector> V = new LinkedList<Vector>();
@@ -132,7 +132,7 @@ public class Polygon extends Geometry {
         }
 
         if (check)
-            return List.of(p);
+            return List.of(new GeoPoint(this, p));
         return null;
     }
 

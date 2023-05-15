@@ -20,12 +20,12 @@ public class Triangle extends Polygon {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         // find intersection with the triangle's plane
-        List<Point> intersect = plane.findIntersections(ray);
+        List<GeoPoint> intersect = plane.findGeoIntersectionsHelper(ray);
         if (intersect == null)
             return null;
-        Point p = intersect.get(0);
+        Point p = intersect.get(0).point;
         // check if the intersection point is inside the triangle
         Point p0 = vertices.get(0);
         Point p1 = vertices.get(1);
@@ -49,7 +49,7 @@ public class Triangle extends Polygon {
         }
 
         if (n1.dotProduct(n2) > 0 && n1.dotProduct(n3) > 0 && n2.dotProduct(n3) > 0) {
-            return List.of(p);
+            return List.of(new GeoPoint(this, p));
         }
 
         return null;
