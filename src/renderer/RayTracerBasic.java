@@ -8,7 +8,7 @@ import scene.Scene;
 import java.util.List;
 
 /**
- * a class for ray tracing
+ * A class for ray tracing
  */
 public class RayTracerBasic extends RayTracerBase {
     //constructor

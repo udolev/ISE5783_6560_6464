@@ -4,13 +4,9 @@ import org.junit.jupiter.api.Test;
 import primitives.Color;
 
 /**
- * Testing Camera Class
+ * Testing ImageWriter Class
  *
  * @author Natan Weis
- */
-/**
- * Test method for
- * {@link Camera#constructRay(int, int, int, int)}.
  */
 public class ImageWriterTest {
     /**
@@ -27,9 +23,9 @@ public class ImageWriterTest {
         for (int j = 0; j < nX; ++j) {
             for (int i = 0; i < nY; ++i) {
                 if (j % 50 == 0 || i % 50 == 0)
-                    testImage.writePixel(j, i, new Color(0, 0, 255));
+                    testImage.writePixel(j, i, new Color(java.awt.Color.YELLOW));
                 else
-                    testImage.writePixel(j, i, new Color(196, 180, 84));
+                    testImage.writePixel(j, i, new Color(java.awt.Color.BLUE));
             }
         }
         testImage.writeToImage();

@@ -5,13 +5,13 @@ import primitives.Ray;
 import scene.Scene;
 
 /**
- * an abstract class for ray tracing
+ * An abstract class for ray tracing
  */
 public abstract class RayTracerBase {
-    //the scene
+    // the scene
     protected Scene scene;
 
-    //constructor
+    // constructor
     public RayTracerBase(Scene scene) {
         this.scene = scene;
     }
