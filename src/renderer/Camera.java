@@ -132,11 +132,9 @@ public class Camera {
 
         int nX = imageWriter.getNx();
         int nY = imageWriter.getNy();
-        Color pixleColor;
         for (int j = 0; j < nX; ++j)
             for (int i = 0; i < nY; ++i) {
-                pixleColor = castRay(j, i);
-                imageWriter.writePixel(j, i, pixleColor);
+                imageWriter.writePixel(j, i, castRay(j, i));
             }
     }
     /**

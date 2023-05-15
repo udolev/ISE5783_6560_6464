@@ -10,7 +10,7 @@ import java.util.List;
  * This class represents a collection of intersectables.
  */
 
-public class Geometries implements Intersectable {
+public class Geometries extends Intersectable {
     final private List<Intersectable> intersectables;
 
     public Geometries() {
@@ -25,6 +25,7 @@ public class Geometries implements Intersectable {
         intersectables.addAll(List.of(geometries));
     }
 
+    @Override
     public List<Point> findIntersections(Ray ray) {
         List<Point> lst = null;
         for (Intersectable intersectable : intersectables) {

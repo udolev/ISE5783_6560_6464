@@ -25,7 +25,7 @@ public class ImageWriterTest {
                 if (j % 50 == 0 || i % 50 == 0)
                     testImage.writePixel(j, i, new Color(java.awt.Color.YELLOW));
                 else
-                    testImage.writePixel(j, i, new Color(java.awt.Color.BLUE));
+                    testImage.writePixel(j, i, new Color(java.awt.Color.RED));
             }
         }
         testImage.writeToImage();

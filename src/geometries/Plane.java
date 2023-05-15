@@ -12,7 +12,7 @@ import static primitives.Util.*;
  * This class will represent a plane in a 3D world.
  * It will be used to represent all flat objects.
  */
-public class Plane implements Geometry {
+public class Plane extends Geometry {
     final private Point q0;
     final private Vector normal;
 
