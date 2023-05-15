@@ -33,10 +33,4 @@ public abstract class Geometry extends Intersectable {
      * @param p the point we will find the normal to.
      */
     public abstract Vector getNormal(Point p);
-
-    @Override
-    public abstract boolean equals(Object obj);
-
-    @Override
-    public abstract String toString();
 }

@@ -49,6 +49,16 @@ public class Cylinder extends Tube {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) { return null; }
+    public List<Point> findIntersections(Ray ray) {
+        return null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj instanceof Cylinder other)
+            return super.equals(other) && height == other.height;
+        return false;
+    }
 }
 

@@ -41,5 +41,15 @@ public class Tube extends RadialGeometry {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) { return null; }
+    public List<Point> findIntersections(Ray ray) {
+        return null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj instanceof Tube other)
+            return super.equals(other) && axisRay.equals(other.axisRay);
+        return false;
+    }
 }

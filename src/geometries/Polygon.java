@@ -135,4 +135,12 @@ public class Polygon extends Geometry {
             return List.of(p);
         return null;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj instanceof Polygon other)
+            return vertices.equals(other.vertices) && plane.equals(other.plane) && size == other.size;
+        return false;
+    }
 }
