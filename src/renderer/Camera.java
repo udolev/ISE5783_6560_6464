@@ -126,7 +126,7 @@ public class Camera {
     /**
      * A method to generate a color for every pixel in th view plane.
      **/
-    public void renderImage() {
+    public ImageWriter renderImage() {
         if (p0 == null || vUp == null || vTo == null || vRight == null || height == 0 || width == 0 || imageWriter == null || rayTracer == null)
             throw new MissingResourceException("A resource is missing", "", "");
 
@@ -136,6 +136,7 @@ public class Camera {
             for (int i = 0; i < nY; ++i) {
                 imageWriter.writePixel(j, i, castRay(j, i));
             }
+        return imageWriter;
     }
     /**
      * A method to create the background grid to the picture.
