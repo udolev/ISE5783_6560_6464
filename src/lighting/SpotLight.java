@@ -12,6 +12,7 @@ import static java.lang.Math.max;
 public class SpotLight extends PointLight {
     // the light's direction
     private Vector direction;
+    private double narrowBeamFactor;
 
     /**
      * Constructor to initialize a point Light source with its intensity and position.
@@ -27,6 +28,11 @@ public class SpotLight extends PointLight {
 
     @Override
     public Color getIntensity(Point p) {
-        return (super.getIntensity(p)).scale(max(0, getL(p).dotProduct(direction)));
+        return (super.getIntensity(p)).scale(Math.pow(max(0, getL(p).dotProduct(direction)), narrowBeamFactor));
+    }
+
+    public SpotLight setNarrowBeam(double narrow) {
+        narrowBeamFactor = narrow;
+        return this;
     }
 }
