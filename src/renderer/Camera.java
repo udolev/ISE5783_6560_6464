@@ -123,6 +123,7 @@ public class Camera {
     public double getDistance() {
         return distance;
     }
+
     /**
      * A method to generate a color for every pixel in th view plane.
      **/
@@ -138,11 +139,12 @@ public class Camera {
             }
         return imageWriter;
     }
+
     /**
      * A method to create the background grid to the picture.
      *
      * @param interval the size of each hex in the grid.
-     * @param color the color of the line of the grid.
+     * @param color    the color of the line of the grid.
      **/
     public void printGrid(int interval, Color color) {
         if (imageWriter == null)
@@ -156,8 +158,9 @@ public class Camera {
 
         imageWriter.writeToImage();
     }
+
     /**
-     * A method that will activate the method WriteToImage from "imageWriter
+     * A method that will activate the method WriteToImage from "imageWriter.
      **/
     public void writeToImage() {
         if (imageWriter == null)
@@ -165,9 +168,9 @@ public class Camera {
 
         imageWriter.writeToImage();
     }
+
     /**
-     * A method to generate a color for each pixel..
-     *
+     * A method to generate a color for each pixel.
      **/
     private Color castRay(int xIndex, int yIndex) {
         Ray ray = constructRay(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
