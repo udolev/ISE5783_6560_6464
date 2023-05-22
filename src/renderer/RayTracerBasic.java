@@ -69,7 +69,7 @@ public class RayTracerBasic extends RayTracerBase {
     /**
      * A method to calculate the diffusive part of the lights effect.
      *
-     * @param nl n*l parameters for calculation.
+     * @param nl       n*l parameters for calculation.
      * @param material the objects material.
      **/
     private Double3 calcDiffusive(Material material, double nl) {
@@ -79,10 +79,10 @@ public class RayTracerBasic extends RayTracerBase {
     /**
      * A method to calculate the specular part of the lights effect.
      *
-     * @param nl n*l - to simplify use of n and l.
-     * @param v  a vector from the camera to thr point.
-     * @param l  the light's direction.
-     * @param n  the normal tho the geometry at a specific point.
+     * @param nl       n*l - to simplify use of n and l.
+     * @param v        a vector from the camera to thr point.
+     * @param l        the light's direction.
+     * @param n        the normal tho the geometry at a specific point.
      * @param material the objects material.
      **/
     private Double3 calcSpecular(Material material, Vector n, Vector l, double nl, Vector v) {

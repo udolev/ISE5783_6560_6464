@@ -7,6 +7,7 @@ import primitives.Vector;
 
 import java.util.MissingResourceException;
 
+import static java.lang.Math.*;
 import static primitives.Util.isZero;
 
 /**
@@ -40,6 +41,26 @@ public class Camera {
         return this;
     }
 
+    /**
+     * Constructor to initialize the camera with its location point and two direction vectors, as well as a rotation angle.
+     *
+     * @param AngleX the angle to which we will need to rotate the camera to on x-axis
+     * @param AngleY the angle to which we will need to rotate the camera to on y-axis
+     * @param AngleZ the angle to which we will need to rotate the camera to on z-axis
+     * @param p      location point.
+     * @param vu     height direction vector.
+     * @param vt     width direction vector.
+     **/
+    public Camera(Point p, Vector vt, Vector vu, double AngleX, double AngleY, double AngleZ) {
+        p0 = p;
+        if (!isZero(vu.dotProduct(vt))) {
+            throw new IllegalArgumentException("vUp isn't orthogonal to vTo");
+        }
+        vTo=vt;
+        vUp=vu;
+        this.rotateCamera(AngleX,AngleY,AngleZ);
+    }
+    
     /**
      * Constructor to initialize the camera with its location point and two direction vectors.
      *
@@ -172,5 +193,41 @@ public class Camera {
     private Color castRay(int xIndex, int yIndex) {
         Ray ray = constructRay(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
         return rayTracer.traceRay(ray);
+    }
+
+    /**
+     * A method to rotate the camera by angles on X,Y,Z axis.
+     * @param angleX the angle on X axis.
+     * @param angleY the angle on Y axis.
+     * @param angleZ the angle on Z axis.
+     **/
+public void rotateCamera(double angleX,double angleY,double angleZ){
+    double radiansAngleX = toRadians(angleX);
+    double radiansAngleY = toRadians(angleY);
+    double radiansAngleZ = toRadians(angleZ);
+    vTo = rotateOnXAxis(vTo, radiansAngleX);
+    vUp = rotateOnXAxis(vUp, radiansAngleX);
+    vTo = rotateOnYAxis(vTo, radiansAngleY);
+    vUp = rotateOnYAxis(vUp, radiansAngleY);
+    vTo = rotateOnZAxis(vTo, radiansAngleZ);
+    vUp = rotateOnZAxis(vUp, radiansAngleZ);
+    vTo = vTo.normalize();
+    vUp = vUp.normalize();
+    vRight = (vTo.crossProduct(vUp)).normalize();
+}
+
+    Vector rotateOnXAxis(Vector V, double Angle) {
+        double x = V.getX(), y = V.getY(), z = V.getZ();
+        return new Vector(x, y * cos(Angle) - z * sin(Angle), y * sin(Angle) + z * cos(Angle));
+    }
+
+    Vector rotateOnYAxis(Vector V, double Angle) {
+        double x = V.getX(), y = V.getY(), z = V.getZ();
+        return new Vector(x * cos(Angle) + z * sin(Angle), y, -x * sin(Angle) + z * cos(Angle));
+    }
+
+    Vector rotateOnZAxis(Vector V, double Angle) {
+        double x = V.getX(), y = V.getY(), z = V.getZ();
+        return new Vector(x * cos(Angle) - y * sin(Angle), x * sin(Angle) + y * cos(Angle), z);
     }
 }

@@ -239,4 +239,23 @@ public class LightsTests {
                 .renderImage() //
                 .writeToImage(); //
     }
+
+    @Test
+    public void testCameraRotation() {
+        double angleX=5;
+        double angleY=0;
+        double angleZ=0;
+        Camera camera = new Camera(new Point(0, 0, 1000),
+                new Vector(0, 0, -1), new Vector(0, 1, 0),angleX,angleY,angleZ)
+                .setVPSize(150, 150).setVPDistance(1000);
+
+        scene1.geometries.add(sphere);
+        scene1.lights.add(new DirectionalLight(sphereLightColor, new Vector(1, 1, -0.5)));
+
+        ImageWriter imageWriter = new ImageWriter("rotation", 500, 500);
+        camera.setImageWriter(imageWriter) //
+                .setRayTracer(new RayTracerBasic(scene1)) //
+                .renderImage() //
+                .writeToImage(); //
+    }
 }
