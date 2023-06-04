@@ -1,5 +1,6 @@
 package geometries;
 
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 import java.util.LinkedList;
@@ -94,12 +95,18 @@ public class Polygon extends Geometry {
     }
 
     @Override
-    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
         // find intersection with the polygon's plane
-        List<GeoPoint> intersect = plane.findGeoIntersectionsHelper(ray);
+        List<GeoPoint> intersect = plane.findGeoIntersectionsHelper(ray, maxDistance);
         if (intersect == null)
             return null;
         Point p = intersect.get(0).point;
+
+        // if the intersection point is a vertex we don't include it
+        for (Point vertex : vertices) {
+            if (p.equals(vertex))
+                return null;
+        }
 
         // check if the intersection point is inside the polygon
         LinkedList<Vector> V = new LinkedList<Vector>();

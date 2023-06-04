@@ -2,6 +2,7 @@ package primitives;
 
 import java.util.List;
 
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 import geometries.Intersectable.GeoPoint;
@@ -14,6 +15,8 @@ public class Ray {
     final private Point p0;
     final private Vector dir;
 
+    private static final double DELTA = 0.1;
+
     /**
      * Constructor to initialize Ray object with its head point and direction vector
      *
@@ -23,6 +26,15 @@ public class Ray {
     public Ray(Point p, Vector v) {
         p0 = p;
         dir = v.normalize();
+    }
+
+    public Ray(Point head, Vector direction, Vector normal) {
+        double vn = direction.dotProduct(normal);
+        if (isZero(vn))
+            p0 = head;
+        else
+            p0 = head.add(normal.scale(vn > 0 ? DELTA : -DELTA));
+        dir = direction.normalize();
     }
 
     public Point getP0() {
@@ -79,5 +91,11 @@ public class Ray {
         }
 
         return closestGeoPoint;
+    }
+
+    public boolean inRange(Point point, double maxDistance) {
+        double t = p0.distance(point);
+        if (alignZero(t - maxDistance) <= 0) return true;
+        return false;
     }
 }

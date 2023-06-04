@@ -101,4 +101,25 @@ class PlaneTest {
         // the same point which appears as reference point in the plane(p0) (0 points)
         assertNull(plane.findIntersections(new Ray(new Point(0, 1, 0), new Vector(7, 3, 3))), "ray is not orthogonal nor parallel to plane and stars at its reference point(p0) ");
     }
+
+    /**
+     * Test method for {@link geometries.Plane#findGeoIntersections(Ray, double)}.
+     */
+    @Test
+    void testFindGeoIntersections() {
+        Plane plane = new Plane(new Point(0, 1, 0), new Point(1, 0, 1), new Point(4, 7, 1));
+        Ray intersectedRay = new Ray(new Point(4, 0, 0), new Vector(-2, 0, 1));
+        // ============ Equivalence Partitions Tests ==============
+        Point p1 = new Point(1.416666666666667, 0, 1.291666666666665);
+        // TC01: Ray does not intersect the plane (0 point)
+        assertNull(plane.findGeoIntersections(new Ray(new Point(4, 0, 0), new Vector(2, 0, 1))), "Ray does not cross the plane");
+        // TC02: Ray intersects the plane and intersection point is in 'fully' range (1 point)
+        List<Intersectable.GeoPoint> result = plane.findGeoIntersections(intersectedRay, 3);
+        assertEquals(List.of(new Intersectable.GeoPoint(plane, p1)), result, "Ray crosses plane and intersection point is in range");
+        // TC03: Ray intersects the plane and intersection point is 'fully' out of range (0 point)
+        assertNull(plane.findGeoIntersections(intersectedRay, 2), "Ray crosses plane and intersection point is out of range");
+        // =============== Boundary Values Tests ==================
+        // TC11: Ray intersects the plane and intersection point is on range (0 point)
+        assertNull(plane.findGeoIntersections(intersectedRay, p1.distance(new Point(4, 0, 0))), "Ray crosses plane and intersection point is on range");
+    }
 }

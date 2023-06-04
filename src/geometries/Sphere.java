@@ -36,7 +36,7 @@ public class Sphere extends RadialGeometry {
     }
 
     @Override
-    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
         Point p0 = ray.getP0();
         Vector v = ray.getDir();
         // if ray starts at the center then there is only one intersection point
@@ -55,15 +55,30 @@ public class Sphere extends RadialGeometry {
         double t1 = alignZero(tm + th);
         double t2 = alignZero(tm - th);
 
-        if (t1 > 0 && t2 > 0) {
-            return List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, ray.getPoint(t2)));
-        } else if (t1 > 0 && (t2 < 0 || isZero(t2))) {
-            return List.of(new GeoPoint(this, ray.getPoint(t1)));
-        } else if ((t1 < 0 || isZero(t1)) && t2 > 0) {
-            return List.of(new GeoPoint(this, ray.getPoint(t2)));
-        } else {
-            return null;
-        }
+        Point p1 = ray.getPoint(t1);
+        Point p2 = ray.getPoint(t2);
+        if (ray.inRange(p1, maxDistance) && ray.inRange(p2, maxDistance)) {
+            if (t1 > 0 && t2 > 0) {
+                return List.of(new GeoPoint(this, p1), new GeoPoint(this, p2));
+            } else if (t1 > 0) {
+                return List.of(new GeoPoint(this, p1));
+            } else if (t2 > 0) {
+                return List.of(new GeoPoint(this, p2));
+            } else {
+                return null;
+            }
+        } else if (ray.inRange(p1, maxDistance)) {
+            if (t1 > 0)
+                return List.of(new GeoPoint(this, p1));
+            else
+                return null;
+        } else if (ray.inRange(p2, maxDistance)) {
+            if (t2 > 0)
+                return List.of(new GeoPoint(this, p2));
+            else
+                return null;
+        } else return null;
+
     }
 
     @Override
