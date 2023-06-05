@@ -53,13 +53,32 @@ public abstract class Intersectable {
         }
     }
 
+    /**
+     * A method to calculate the intersections between a ray and an object.
+     *
+     * @param ray the ray.
+     **/
     public final List<GeoPoint> findGeoIntersections(Ray ray) {
         return findGeoIntersections(ray, Double.POSITIVE_INFINITY);
     }
 
+    /**
+     * A method to calculate the intersections between a ray and an object with a maximum distance.
+     *
+     * @param maxDistance the maximum distance we will calculate intersections to,
+     *                    in order to prevent cases when objects behind the lightSource will shadow the main object.
+     * @param ray         the ray.
+     **/
     public final List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
         return findGeoIntersectionsHelper(ray, maxDistance);
     }
 
+    /**
+     * An abstract method to help calculate the intersections between a ray and an object.
+     *
+     * @param ray         the ray.
+     * @param maxDistance the maximum distance we will calculate intersections too,
+     *                    in order to prevent cases when objects behind the lightSource will shadow the main object.
+     **/
     protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance);
 }

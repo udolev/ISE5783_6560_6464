@@ -13,14 +13,23 @@ import java.util.List;
 public class Geometries extends Intersectable {
     final private List<Intersectable> intersectables;
 
+    /**
+     * A default contractor.
+     **/
     public Geometries() {
         intersectables = new LinkedList<Intersectable>();
     }
 
+    /**
+     * A contractor to initialise a new Geometries object with a list of intersectables.
+     **/
     public Geometries(Intersectable... geometries) {
         intersectables = List.of(geometries);
     }
 
+    /**
+     * A method to add new intersectables objects to a given geometries item.
+     **/
     public void add(Intersectable... geometries) {
         intersectables.addAll(List.of(geometries));
     }

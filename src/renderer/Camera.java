@@ -56,11 +56,11 @@ public class Camera {
         if (!isZero(vu.dotProduct(vt))) {
             throw new IllegalArgumentException("vUp isn't orthogonal to vTo");
         }
-        vTo = vt;
-        vUp = vu;
-        this.rotateCamera(AngleX, AngleY, AngleZ);
+        vTo=vt;
+        vUp=vu;
+        this.rotateCamera(AngleX,AngleY,AngleZ);
     }
-
+    
     /**
      * Constructor to initialize the camera with its location point and two direction vectors.
      *
@@ -144,7 +144,6 @@ public class Camera {
     public double getDistance() {
         return distance;
     }
-
     /**
      * A method to generate a color for every pixel in th view plane.
      **/
@@ -160,12 +159,11 @@ public class Camera {
             }
         return imageWriter;
     }
-
     /**
      * A method to create the background grid to the picture.
      *
      * @param interval the size of each hex in the grid.
-     * @param color    the color of the line of the grid.
+     * @param color the color of the line of the grid.
      **/
     public void printGrid(int interval, Color color) {
         if (imageWriter == null)
@@ -179,7 +177,6 @@ public class Camera {
 
         imageWriter.writeToImage();
     }
-
     /**
      * A method that will activate the method WriteToImage from "imageWriter
      **/
@@ -189,9 +186,9 @@ public class Camera {
 
         imageWriter.writeToImage();
     }
-
     /**
      * A method to generate a color for each pixel..
+     *
      **/
     private Color castRay(int xIndex, int yIndex) {
         Ray ray = constructRay(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
@@ -200,62 +197,37 @@ public class Camera {
 
     /**
      * A method to rotate the camera by angles on X,Y,Z axis.
-     *
      * @param angleX the angle on X axis.
      * @param angleY the angle on Y axis.
      * @param angleZ the angle on Z axis.
      **/
-    public Camera rotateCamera(double angleX, double angleY, double angleZ) {
-        double radiansAngleX = toRadians(angleX);
-        double radiansAngleY = toRadians(angleY);
-        double radiansAngleZ = toRadians(angleZ);
-        vTo = rotateOnXAxis(vTo, radiansAngleX);
-        vUp = rotateOnXAxis(vUp, radiansAngleX);
-        vTo = rotateOnYAxis(vTo, radiansAngleY);
-        vUp = rotateOnYAxis(vUp, radiansAngleY);
-        vTo = rotateOnZAxis(vTo, radiansAngleZ);
-        vUp = rotateOnZAxis(vUp, radiansAngleZ);
-        vTo = vTo.normalize();
-        vUp = vUp.normalize();
-        vRight = (vTo.crossProduct(vUp)).normalize();
-        return this;
-    }
+public void rotateCamera(double angleX,double angleY,double angleZ){
+    double radiansAngleX = toRadians(angleX);
+    double radiansAngleY = toRadians(angleY);
+    double radiansAngleZ = toRadians(angleZ);
+    vTo = rotateOnXAxis(vTo, radiansAngleX);
+    vUp = rotateOnXAxis(vUp, radiansAngleX);
+    vTo = rotateOnYAxis(vTo, radiansAngleY);
+    vUp = rotateOnYAxis(vUp, radiansAngleY);
+    vTo = rotateOnZAxis(vTo, radiansAngleZ);
+    vUp = rotateOnZAxis(vUp, radiansAngleZ);
+    vTo = vTo.normalize();
+    vUp = vUp.normalize();
+    vRight = (vTo.crossProduct(vUp)).normalize();
+}
 
-    /**
-     * A method to rotate a vector on X-axis.
-     *
-     * @param Angle the rotation angle.
-     * @param V     the given vector.
-     **/
     Vector rotateOnXAxis(Vector V, double Angle) {
         double x = V.getX(), y = V.getY(), z = V.getZ();
         return new Vector(x, y * cos(Angle) - z * sin(Angle), y * sin(Angle) + z * cos(Angle));
     }
 
-    /**
-     * A method to rotate a vector on Y-axis.
-     *
-     * @param Angle the rotation angle.
-     * @param V     the given vector.
-     **/
     Vector rotateOnYAxis(Vector V, double Angle) {
         double x = V.getX(), y = V.getY(), z = V.getZ();
         return new Vector(x * cos(Angle) + z * sin(Angle), y, -x * sin(Angle) + z * cos(Angle));
     }
 
-    /**
-     * A method to rotate a vector on Z-axis.
-     *
-     * @param Angle the rotation angle.
-     * @param V     the given vector.
-     **/
     Vector rotateOnZAxis(Vector V, double Angle) {
         double x = V.getX(), y = V.getY(), z = V.getZ();
         return new Vector(x * cos(Angle) - y * sin(Angle), x * sin(Angle) + y * cos(Angle), z);
-    }
-
-    public Camera changeCameraPosition(Vector dir) {
-        p0 = p0.add(dir);
-        return this;
     }
 }

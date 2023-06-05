@@ -27,7 +27,7 @@ public class RayTracerBasic extends RayTracerBase {
     }
 
     /**
-     * A method to generate the color for a ray.
+     * A method to trace a ray and find the color its intersection.
      *
      * @param ray the given ray.
      **/
@@ -47,16 +47,23 @@ public class RayTracerBasic extends RayTracerBase {
                 add(scene.ambientLight.getIntensity());
     }
 
+    /**
+     * A method to calculate the local and global effects on a geoPoint color for a given ray.
+     *
+     * @param ray the ray.
+     * @param gp  the geoPoint.
+     **/
     private Color calcColor(GeoPoint gp, Ray ray, int level, Double3 k) {
         Color color = calcLocalEffects(gp, ray, k);
         return 1 == level ? color : color.add(calcGlobalEffects(gp, ray, level, k));
     }
 
     /**
-     * A method to calculate the  source lights effect on a geoPoint color for a given ray.
+     * A method to calculate the source lights effect on a geoPoint color for a given ray.
      *
      * @param ray the ray.
      * @param gp  the geoPoint.
+     * @return the color of a point after adding the local effects.
      **/
     private Color calcLocalEffects(GeoPoint gp, Ray ray, Double3 k) {
         Color color = gp.geometry.getEmission();
@@ -81,23 +88,55 @@ public class RayTracerBasic extends RayTracerBase {
         return color;
     }
 
+    /**
+     * A recursive method to generate reelected and refracted rays and calculate the color effects on a geoPoint.
+     *
+     * @param k     Low cumulative attenuation coefficient value.
+     * @param level maximum depth of the recursion.
+     * @param ray   the ray.
+     * @return the color of a point after adding the global effects.
+     **/
     private Color calcGlobalEffects(GeoPoint gp, Ray ray, int level, Double3 k) {
-        Color color = Color.BLACK;
         Vector v = ray.getDir();
         Vector n = gp.geometry.getNormal(gp.point);
         Material material = gp.geometry.getMaterial();
-        return calcColorGLobalEffect(constructReflectedRay(gp, v, n), level, k, material.kR).add(calcColorGLobalEffect(constructRefractedRay(gp, v, n), level, k, material.kT));
+        return calcColorGlobalEffect(constructReflectedRay(gp, v, n), level, k, material.kR).add(calcColorGlobalEffect(constructRefractedRay(gp, v, n), level, k, material.kT));
     }
 
+    /**
+     * A method to create reflection ray from a light ray to a point.
+     *
+     * @param gp the given geoPoint.
+     * @param v  the light's ray direction.
+     * @param n  the normal.
+     * @return the reflected ray.
+     **/
     private Ray constructReflectedRay(GeoPoint gp, Vector v, Vector n) {
         return new Ray(gp.point, v.subtract(n.scale(v.dotProduct(n)).scale(2)), n);
     }
 
+    /**
+     * A method to create refraction ray from a light ray to a point.
+     *
+     * @param gp the given geoPoint.
+     * @param v  the light's ray direction.
+     * @param n  the normal.
+     * @return the refracted ray.
+     **/
     private Ray constructRefractedRay(GeoPoint gp, Vector v, Vector n) {
         return new Ray(gp.point, v, n);
     }
 
-    private Color calcColorGLobalEffect(Ray ray, int level, Double3 k, Double3 kx) {
+    /**
+     * A method to generate reelected and refracted rays and calculate the color effects on a point.
+     *
+     * @param k     Low cumulative attenuation coefficient value.
+     * @param kx    hte cumulative coefficient.
+     * @param level maximum depth.
+     * @param ray   the ray.
+     * @return the color on the scene.
+     **/
+    private Color calcColorGlobalEffect(Ray ray, int level, Double3 k, Double3 kx) {
         Double3 kkx = k.product(kx);
         if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
         GeoPoint gp = findClosestIntersection(ray);
@@ -105,6 +144,12 @@ public class RayTracerBasic extends RayTracerBase {
         return isZero(gp.geometry.getNormal(gp.point).dotProduct(ray.getDir())) ? Color.BLACK : calcColor(gp, ray, level - 1, kkx).scale(kx);
     }
 
+    /**
+     * A method to calculate the closest intersection between a ray and an object.
+     *
+     * @param ray the ray.
+     * @return the geoPoint closest to the head of the ray.
+     **/
     private GeoPoint findClosestIntersection(Ray ray) {
         var intersections = scene.geometries.findGeoIntersections(ray);
         return intersections == null ? null : ray.findClosestGeoPoint(intersections);
@@ -150,6 +195,15 @@ public class RayTracerBasic extends RayTracerBase {
 //        return true;
 //    }
 
+    /**
+     * A method to calculate the light source effect on a point while considering the
+     * objects in between the point and the light-source.
+     *
+     * @param ls       the lightSource object.
+     * @param geoPoint the give pont.
+     * @param l        the light's direction.
+     * @param n        the normal tho the geometry at a specific point.
+     **/
     private Double3 transparency(GeoPoint geoPoint, LightSource ls, Vector l, Vector n) {
         Vector lightDirection = l.scale(-1);  // from point to light source
         Ray lightRay = new Ray(geoPoint.point, lightDirection, n);
