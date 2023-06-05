@@ -1,11 +1,14 @@
 package geometries;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;

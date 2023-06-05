@@ -70,4 +70,23 @@ class TriangleTest {
         assertNull(triangle.findIntersections(new Ray(new Point(-1, -1, -1), new Vector(-1, 1, 4))),
                 "Ray crosses the triangle's plane at a edge's line");
     }
+    @Test
+    void testFindGeoIntersections() {
+        Triangle triangle = new Triangle(new Point(1, 0, 0), new Point(0, 1, 0), new Point(0, 0, 1));
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: intersection point is inside the Polygon and inside max distance(1 point)
+        Point p = new Point(0.142857142857143, 0.142857142857143, 0.714285714285714);
+        List<Intersectable.GeoPoint> result = triangle.findGeoIntersections(new Ray(new Point(-1, -1, -1), new Vector(1, 1, 1.5)),100);
+        assertEquals(List.of(new Intersectable.GeoPoint(triangle, p)), result, "Ray crosses triangle inside of it and inside max distance");
+         triangle = new Triangle(new Point(1, -1, 2), new Point(-1, -1, 2), new Point(-1, 1, 2));
+        // TC02: intersection point is outside the triangle(0 point)
+        assertNull(triangle.findGeoIntersections(new Ray(new Point(1000, 1000, 1000), new Vector(0, 0, 1)), 100), "Ray does not cross the triangle");
+        // TC03: intersection point is inside the triangle and outside max distance(0 point)
+        result = triangle.findGeoIntersections(new Ray(new Point(0, 0.5, 0), new Vector(0, 0, 1)), 1);
+        assertNull(result, "ray crosses triangle and intersection point is out of range");
+        // =============== Boundary Values Tests ==================
+        // TC11: Ray intersects the triangle and intersection point is on range (1 point)
+        result = triangle.findGeoIntersections(new Ray(new Point(-0.5, -0.5, 0), new Vector(0, 0, 1)), 2);
+        assertEquals(List.of(new Intersectable.GeoPoint(triangle, new Point(-0.5, -0.5, 2))), result, "Ray crosses triangle inside of it and on max distance");
+    }
 }

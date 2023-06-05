@@ -47,4 +47,40 @@ class GeometriesTest {
         // ensure that |result| = 4 (sphere - 2, triangle - 1, plane - 1)
         assertEquals(4, result.size(), "Wrong number of intersections");
     }
+
+    @Test
+    void findGoeIntersections() {
+        Sphere sphere = new Sphere(3, new Point(1, 0, 0));
+        Triangle triangle = new Triangle(new Point(-5, 0, -5), new Point(-5, -5, 2), new Point(-5, 5, 2));
+        Plane plane = new Plane(new Point(-10, 0, 0), new Vector(1, 0, 0));
+        Geometries geometries = new Geometries(sphere, triangle, plane);
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: of a collection, some shapes are intersected but not all
+        List<Intersectable.GeoPoint> result = geometries.findGeoIntersections(new Ray(new Point(5, 0, 0), new Vector(-1, -0.5, 0.5)));
+        // ensure that |result| = 3 (sphere - 2, triangle - 0, plane - 1)
+        assertEquals(3, result.size(), "Wrong number of intersections");
+        // TC02: not all the shapes are intersected, because not all intersections are in range.
+        result = geometries.findGeoIntersections(new Ray(new Point(5, 0, 0), new Vector(-2, -0.5, 0)), 5);
+        // ensure that |result| = 1 (sphere - 1)
+        Point p = new Point(5, 0, 0);
+        assertEquals(1, result.size(), "Wrong number of intersections");
+        // =============== Boundary Values Tests ==================
+        // TC11: intersection with an empty collection
+        assertNull(new Geometries().findGeoIntersections(new Ray(new Point(1, 1, 1), new Vector(1, 2, 3))),
+                "empty collection gives intersection points");
+        // TC12: no shape is intersected
+        assertNull(geometries.findGeoIntersections(new Ray(new Point(5, 0, 0), new Vector(1, -0.5, 0.5))),
+                "Wrong number of intersections");
+        // TC13: only one shape is intersected
+        result = geometries.findGeoIntersections(new Ray(new Point(5, 0, 0), new Vector(-1, -20, 0.5)));
+        // ensure that |result| = 1 (sphere - 0, triangle - 0, plane - 1)
+        assertEquals(1, result.size(), "Wrong number of intersections");
+        // TC14: all the shapes are intersected
+        result = geometries.findGeoIntersections(new Ray(new Point(5, 0, 0), new Vector(-2, -0.5, 0)));
+        // ensure that |result| = 4 (sphere - 2, triangle - 1, plane - 1)
+        assertEquals(4, result.size(), "Wrong number of intersections");
+        //  TC15: not all the shapes are intersected,and 1 intersection is on range.
+        result = geometries.findGeoIntersections(new Ray(p, new Vector(-2, -0.5, 0)), 6.72);
+        assertEquals(2, result.size(), "Wrong number of intersections");
+    }
 }

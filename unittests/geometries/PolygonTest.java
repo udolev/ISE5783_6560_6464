@@ -107,4 +107,25 @@ public class PolygonTest {
       // TC13: intersection point is on a polygon's edge line (0 points)
       assertNull(polygon.findIntersections(new Ray(new Point(2, 1, 0), new Vector(0, 0, 1))), "Ray crosses the polygon's plane at a edge's line");
    }
+   /**
+    * Test method for {@link geometries.Polygon#findGeoIntersections(Ray, double)}.
+    */
+   @Test
+   void testFindGeoIntersections() {
+      Point[] pts = {new Point(1,-1,2),new Point(-1,-1,2),new Point(-1,1,2),new Point(1,1,2)};
+      Polygon polygon = new Polygon(pts);
+      // ============ Equivalence Partitions Tests ==============
+      // TC01: intersection point is inside the Polygon and inside max distance(1 point)
+      Point p = new Point(0,0.5,2);
+      List<Intersectable.GeoPoint> result = polygon.findGeoIntersections(new Ray(new Point(0, 0.5, 0), new Vector(0, 0, 1)),100);
+      assertEquals(List.of(new Intersectable.GeoPoint(polygon, p)), result, "Ray crosses polygon and intersection point is in range");
+      // TC02: intersection point is outside the Polygon(0 point)
+      assertNull(polygon.findGeoIntersections(new Ray(new Point(1000, 1000, 1000), new Vector(0, 0, 1)),100), "Ray does not cross the polygon");
+      // TC03: intersection point is inside the Polygon and outside max distance(0 point)
+      result = polygon.findGeoIntersections(new Ray(new Point(0, 0.5, 0), new Vector(0, 0, 1)),1);
+      assertNull(result, "ray crosses polygon and intersection point is out of range");
+      // =============== Boundary Values Tests ==================
+      // TC11: Ray intersects the plane and intersection point is on range (1 point)
+      assertEquals(List.of(new Intersectable.GeoPoint(polygon,new Point(0, 0, 2))),polygon.findGeoIntersections(new Ray(new Point(0, 0, 0), new Vector(0, 0, 1)),2), "Ray crosses polygon and intersection point is on range");
+   }
 }
