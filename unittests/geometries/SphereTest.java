@@ -122,4 +122,36 @@ class SphereTest {
         assertNull(sphere.findIntersections(new Ray(new Point(1, 2, 0), new Vector(0, 0, 1))),
                 "Ray's line is outside, ray is orthogonal to ray start to sphere's center line");
     }
+
+    /**
+     * Test method for {@link geometries.Sphere#findGeoIntersections(Ray, double)}.
+     */
+    @Test
+    void testFindGeoIntersections() {
+        Sphere sphere = new Sphere(1d, new Point(1, 0, 0));
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Ray's line is outside the sphere (0 points)
+        assertNull(sphere.findGeoIntersections(new Ray(new Point(-1, 0, 0), new Vector(1, 1, 0))),
+                "Ray's line out of sphere");
+        // TC02: Ray intersects the sphere both intersection points is 'fully' in range (2 point)
+        Point p1 = new Point(0.0651530771650466, 0.355051025721682, 0);
+        Point p2 = new Point(1.53484692283495, 0.844948974278318, 0);
+        List<Intersectable.GeoPoint> result = sphere.findGeoIntersections(new Ray(new Point(-1, 0, 0),
+                new Vector(3, 1, 0)), 100);
+        assertEquals(2, result.size(), "Wrong number of points");
+        if (result.get(0).point.getX() > result.get(1).point.getX())
+            result = List.of(result.get(1), result.get(0));
+        assertEquals(List.of(new Intersectable.GeoPoint(sphere, p1), new Intersectable.GeoPoint(sphere, p2)), result, "Ray crosses sphere");
+        // TC03: Ray intersects the sphere and one of the intersection points is 'fully' out of range (1 point)
+        result = sphere.findGeoIntersections(new Ray(new Point(-1, 0, 0),
+                new Vector(3, 1, 0)), 2);
+        assertEquals(List.of(new Intersectable.GeoPoint(sphere, p1)), result, "Ray crosses sphere and the distance limits it to one intersections");
+        // TC04: Ray intersects the sphere and both intersection points is 'fully' out of range (0 point)
+        assertNull(sphere.findGeoIntersections(new Ray(new Point(-1, 0, 0), new Vector(1, 1, 0)), 0.1), "Found intersections out of range");
+
+        // =============== Boundary Values Tests ==================
+        // TC11: Ray intersects the sphere and the first intersection point is on range (1 point)
+        assertEquals(List.of(new Intersectable.GeoPoint(sphere, p1)), sphere.findGeoIntersections(new Ray(new Point(-1, 0, 0), new Vector(3, 1, 0)),
+                p1.distance(new Point(-1, 0, 0))), "Ray crosses plane and intersection point is on range");
+    }
 }

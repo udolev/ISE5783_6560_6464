@@ -113,7 +113,7 @@ class PlaneTest {
         Point p1 = new Point(1.416666666666667, 0, 1.291666666666665);
         // TC01: Ray does not intersect the plane (0 point)
         assertNull(plane.findGeoIntersections(new Ray(new Point(4, 0, 0), new Vector(2, 0, 1))), "Ray does not cross the plane");
-        // TC02: Ray intersects the plane and intersection point is in 'fully' range (1 point)
+        // TC02: Ray intersects the plane and intersection point is 'fully' in range (1 point)
         List<Intersectable.GeoPoint> result = plane.findGeoIntersections(intersectedRay, 3);
         assertEquals(List.of(new Intersectable.GeoPoint(plane, p1)), result, "Ray crosses plane and intersection point is in range");
         // TC03: Ray intersects the plane and intersection point is 'fully' out of range (0 point)
