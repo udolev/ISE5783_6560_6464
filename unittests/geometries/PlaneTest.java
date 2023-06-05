@@ -119,7 +119,7 @@ class PlaneTest {
         // TC03: Ray intersects the plane and intersection point is 'fully' out of range (0 point)
         assertNull(plane.findGeoIntersections(intersectedRay, 2), "Ray crosses plane and intersection point is out of range");
         // =============== Boundary Values Tests ==================
-        // TC11: Ray intersects the plane and intersection point is on range (0 point)
-        assertNull(plane.findGeoIntersections(intersectedRay, p1.distance(new Point(4, 0, 0))), "Ray crosses plane and intersection point is on range");
+        // TC11: Ray intersects the plane and intersection point is on range (1 point)
+        assertEquals(List.of(new Intersectable.GeoPoint(plane, p1)), plane.findGeoIntersections(intersectedRay, p1.distance(new Point(4, 0, 0))), "Ray crosses plane and intersection point is on range");
     }
 }
