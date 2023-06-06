@@ -1,6 +1,7 @@
 package renderer;
 
 import geometries.Intersectable.GeoPoint;
+import geometries.Plane;
 import lighting.LightSource;
 import primitives.*;
 import scene.Scene;

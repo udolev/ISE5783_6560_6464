@@ -1,10 +1,13 @@
 package renderer;
 
+import geometries.Plane;
 import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.MissingResourceException;
 
 import static java.lang.Math.*;
@@ -26,9 +29,17 @@ public class Camera {
     private double width;
     // the distance between the camera and the view plane
     private double distance;
+    // view plane's center point
+    private Point pCenter;
 
     private ImageWriter imageWriter;
     private RayTracerBase rayTracer;
+
+    // Depth Of Field features
+    private double apertureSize = 0;
+    private static final int NUM_OF_RAYS_IN_LINE = 9;
+    private double focalDistance; // from view plane
+    private Plane focalPlane;
 
     // Setters
     public Camera setImageWriter(ImageWriter imageWriter) {
@@ -56,11 +67,11 @@ public class Camera {
         if (!isZero(vu.dotProduct(vt))) {
             throw new IllegalArgumentException("vUp isn't orthogonal to vTo");
         }
-        vTo=vt;
-        vUp=vu;
-        this.rotateCamera(AngleX,AngleY,AngleZ);
+        vTo = vt;
+        vUp = vu;
+        this.rotateCamera(AngleX, AngleY, AngleZ);
     }
-    
+
     /**
      * Constructor to initialize the camera with its location point and two direction vectors.
      *
@@ -99,6 +110,7 @@ public class Camera {
         if (isZero(distance))
             throw new IllegalArgumentException("distance can't be zero");
         this.distance = distance;
+        pCenter = p0.add(vTo.scale(distance));
         return this;
     }
 
@@ -111,7 +123,11 @@ public class Camera {
      * @param i  the pixel's row.
      **/
     public Ray constructRay(int nX, int nY, int j, int i) {
-        Point pCenter = p0.add(vTo.scale(distance));
+        Point pIJ = constructPixelPoint(nX, nY, j, i);
+        return new Ray(p0, pIJ.subtract(p0));
+    }
+
+    private Point constructPixelPoint(int nX, int nY, int j, int i) {
         double Ry = height / nY;
         double Rx = width / nX;
         double yI = -(i - ((nY - 1) / 2.0)) * Ry;
@@ -121,7 +137,7 @@ public class Camera {
         if (xJ != 0) pIJ = pIJ.add(vRight.scale(xJ));
         if (yI != 0) pIJ = pIJ.add(vUp.scale(yI));
 
-        return new Ray(p0, pIJ.subtract(p0));
+        return pIJ;
     }
 
     /**
@@ -144,6 +160,7 @@ public class Camera {
     public double getDistance() {
         return distance;
     }
+
     /**
      * A method to generate a color for every pixel in th view plane.
      **/
@@ -159,11 +176,12 @@ public class Camera {
             }
         return imageWriter;
     }
+
     /**
      * A method to create the background grid to the picture.
      *
      * @param interval the size of each hex in the grid.
-     * @param color the color of the line of the grid.
+     * @param color    the color of the line of the grid.
      **/
     public void printGrid(int interval, Color color) {
         if (imageWriter == null)
@@ -177,6 +195,7 @@ public class Camera {
 
         imageWriter.writeToImage();
     }
+
     /**
      * A method that will activate the method WriteToImage from "imageWriter
      **/
@@ -186,35 +205,49 @@ public class Camera {
 
         imageWriter.writeToImage();
     }
+
     /**
-     * A method to generate a color for each pixel..
-     *
+     * A method to generate a color for each pixel.
      **/
     private Color castRay(int xIndex, int yIndex) {
-        Ray ray = constructRay(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
-        return rayTracer.traceRay(ray);
+        Ray headRay = constructRay(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
+        Color pixelColor = rayTracer.traceRay(headRay);
+        if (isZero(apertureSize))
+            return pixelColor;
+
+        Point pixelPoint = constructPixelPoint(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
+        List<Point> aperture = generateAperture(pixelPoint);
+        Point focalPoint = focalPlane.findIntersections(headRay).get(0);
+        List<Ray> rayBeam = generateRayBeamToPoint(aperture, focalPoint);
+
+        for (Ray currentRay : rayBeam)
+            pixelColor = pixelColor.add(rayTracer.traceRay(currentRay));
+        pixelColor = pixelColor.scale(1.0 / (NUM_OF_RAYS_IN_LINE * NUM_OF_RAYS_IN_LINE + 1));
+
+        return pixelColor;
     }
 
     /**
      * A method to rotate the camera by angles on X,Y,Z axis.
+     *
      * @param angleX the angle on X axis.
      * @param angleY the angle on Y axis.
      * @param angleZ the angle on Z axis.
      **/
-public void rotateCamera(double angleX,double angleY,double angleZ){
-    double radiansAngleX = toRadians(angleX);
-    double radiansAngleY = toRadians(angleY);
-    double radiansAngleZ = toRadians(angleZ);
-    vTo = rotateOnXAxis(vTo, radiansAngleX);
-    vUp = rotateOnXAxis(vUp, radiansAngleX);
-    vTo = rotateOnYAxis(vTo, radiansAngleY);
-    vUp = rotateOnYAxis(vUp, radiansAngleY);
-    vTo = rotateOnZAxis(vTo, radiansAngleZ);
-    vUp = rotateOnZAxis(vUp, radiansAngleZ);
-    vTo = vTo.normalize();
-    vUp = vUp.normalize();
-    vRight = (vTo.crossProduct(vUp)).normalize();
-}
+    public void rotateCamera(double angleX, double angleY, double angleZ) {
+        double radiansAngleX = toRadians(angleX);
+        double radiansAngleY = toRadians(angleY);
+        double radiansAngleZ = toRadians(angleZ);
+        vTo = rotateOnXAxis(vTo, radiansAngleX);
+        vUp = rotateOnXAxis(vUp, radiansAngleX);
+        vTo = rotateOnYAxis(vTo, radiansAngleY);
+        vUp = rotateOnYAxis(vUp, radiansAngleY);
+        vTo = rotateOnZAxis(vTo, radiansAngleZ);
+        vUp = rotateOnZAxis(vUp, radiansAngleZ);
+        vTo = vTo.normalize();
+        vUp = vUp.normalize();
+        vRight = (vTo.crossProduct(vUp)).normalize();
+    }
 
     Vector rotateOnXAxis(Vector V, double Angle) {
         double x = V.getX(), y = V.getY(), z = V.getZ();
@@ -229,5 +262,44 @@ public void rotateCamera(double angleX,double angleY,double angleZ){
     Vector rotateOnZAxis(Vector V, double Angle) {
         double x = V.getX(), y = V.getY(), z = V.getZ();
         return new Vector(x * cos(Angle) - y * sin(Angle), x * sin(Angle) + y * cos(Angle), z);
+    }
+
+    private List<Point> generateAperture(Point pixel) {
+        if (isZero(apertureSize)) return List.of(pixel);
+        List<Point> targetArea = new LinkedList<>();
+        Point leftCorner = pixel.add(vUp.scale(apertureSize / 2)).add(vRight.scale(-apertureSize / 2));
+        Point current = leftCorner;
+        for (int i = 0; i < NUM_OF_RAYS_IN_LINE; ++i) {
+            if (i != 0)
+                current = leftCorner.add(vUp.scale(-apertureSize * i / NUM_OF_RAYS_IN_LINE));
+            for (int j = 0; j < NUM_OF_RAYS_IN_LINE; ++j) {
+                targetArea.add(current);
+                current = current.add(vRight.scale(apertureSize / NUM_OF_RAYS_IN_LINE));
+            }
+        }
+        return targetArea;
+    }
+
+    public Camera setApertureSize(double apertureSize) {
+        this.apertureSize = apertureSize;
+        return this;
+    }
+
+    public Camera setFocalPlaneDistance(double focalDistance) {
+        if (isZero(focalDistance))
+            throw new IllegalArgumentException("focal distance can't be zero");
+        this.focalDistance = focalDistance;
+        focalPlane = new Plane(pCenter.add(vTo.scale(focalDistance)), vTo);
+        return this;
+    }
+
+    public List<Ray> generateRayBeamToPoint(List<Point> points, Point target) {
+        List rayBeam = new LinkedList<Ray>();
+        Vector direction;
+        for (Point point : points) {
+            direction = target.subtract(point);
+            rayBeam.add(new Ray(point, direction));
+        }
+        return rayBeam;
     }
 }

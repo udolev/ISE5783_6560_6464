@@ -1,5 +1,6 @@
 package primitives;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static primitives.Util.alignZero;

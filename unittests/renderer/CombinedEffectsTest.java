@@ -22,21 +22,21 @@ public class CombinedEffectsTest {
         Scene scene = new Scene("Test scene");
         scene.setAmbientLight(new AmbientLight(new Color(WHITE), 0.15));
         scene.geometries.add( //
-                new Polygon(new Point(0, 100, -100), new Point(100, 100, -80),
-                        new Point(100, -100, -80), new Point(0,-100,-100)) //
+                new Polygon(new Point(0, 100, -100), new Point(100, 100, -60),
+                        new Point(100, -100, -60), new Point(0, -100, -100)) //
                         .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60).setKr(0.8)), //
-                new Polygon(new Point(0, 100, -100), new Point(-100, 100, -80),
-                        new Point(-100, -100, -80), new Point(0,-100,-100)) //
+                new Polygon(new Point(0, 100, -100), new Point(-100, 100, -60),
+                        new Point(-100, -100, -60), new Point(0, -100, -100)) //
                         .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60).setKr(0.8)), //
                 new Sphere(30d, new Point(0, 0, 0)).setEmission(new Color(BLUE)) //
                         .setMaterial(new Material().setKd(0.6).setKs(0.2).setShininess(30).setKt(0.6)),
-                new Triangle(new Point(0,10,0), new Point(0,-10,0), new Point(-10,-10,0)).
-                setEmission(new Color(GREEN).scale(2)).setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60)));
+                new Triangle(new Point(0, 10, 0), new Point(0, -10, 0), new Point(-10, -10, 0)).
+                        setEmission(new Color(GREEN).scale(2)).setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60)));
 
         scene.lights.add(new SpotLight(new Color(350, 200, 200), new Point(15, 15, 70), new Vector(0, 0, -1)) //
                 .setKl(4E-5).setKq(1E-6));
 
-        ImageWriter imageWriter = new ImageWriter("combinedEffects", 600, 600);
+        ImageWriter imageWriter = new ImageWriter("combinedEffects", 2000, 2000);
         camera.setImageWriter(imageWriter) //
                 .setRayTracer(new RayTracerBasic(scene)) //
                 .renderImage() //
