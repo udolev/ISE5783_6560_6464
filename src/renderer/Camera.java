@@ -37,8 +37,9 @@ public class Camera {
 
     // Depth Of Field features
     private double apertureSize = 0;
-    private static final int NUM_OF_RAYS_IN_LINE = 9;
-    private double focalDistance; // from view plane
+
+    private int numOfRaysInLine = 9;
+    private double focalDistance = 100; // from view plane
     private Plane focalPlane;
 
     // Setters
@@ -49,6 +50,11 @@ public class Camera {
 
     public Camera setRayTracer(RayTracerBase rayTracer) {
         this.rayTracer = rayTracer;
+        return this;
+    }
+
+    public Camera setNumOfRaysInLine(int numOfRaysInLine) {
+        this.numOfRaysInLine = numOfRaysInLine;
         return this;
     }
 
@@ -222,7 +228,7 @@ public class Camera {
 
         for (Ray currentRay : rayBeam)
             pixelColor = pixelColor.add(rayTracer.traceRay(currentRay));
-        pixelColor = pixelColor.scale(1.0 / (NUM_OF_RAYS_IN_LINE * NUM_OF_RAYS_IN_LINE + 1));
+        pixelColor = pixelColor.scale(1.0 / (numOfRaysInLine * numOfRaysInLine + 1));
 
         return pixelColor;
     }
@@ -269,12 +275,12 @@ public class Camera {
         List<Point> targetArea = new LinkedList<>();
         Point leftCorner = pixel.add(vUp.scale(apertureSize / 2)).add(vRight.scale(-apertureSize / 2));
         Point current = leftCorner;
-        for (int i = 0; i < NUM_OF_RAYS_IN_LINE; ++i) {
+        for (int i = 0; i < numOfRaysInLine; ++i) {
             if (i != 0)
-                current = leftCorner.add(vUp.scale(-apertureSize * i / NUM_OF_RAYS_IN_LINE));
-            for (int j = 0; j < NUM_OF_RAYS_IN_LINE; ++j) {
+                current = leftCorner.add(vUp.scale(-apertureSize * i / numOfRaysInLine));
+            for (int j = 0; j < numOfRaysInLine; ++j) {
                 targetArea.add(current);
-                current = current.add(vRight.scale(apertureSize / NUM_OF_RAYS_IN_LINE));
+                current = current.add(vRight.scale(apertureSize / numOfRaysInLine));
             }
         }
         return targetArea;

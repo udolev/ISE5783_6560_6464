@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="Added test for findGeoIntersections in PlaneTest.">
-      <change afterPath="$PROJECT_DIR$/unittests/renderer/DepthOfFieldTest.java" afterDir="false" />
+    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="Depth Of Field works!!!! &#10;Need to refactor and add comments, then generate a representative scene.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/primitives/Ray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/primitives/Ray.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/Camera.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/RayTracerBasic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/RayTracerBasic.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unittests/renderer/CombinedEffectsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/renderer/CombinedEffectsTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unittests/renderer/DepthOfFieldTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/renderer/DepthOfFieldTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +69,7 @@
       <recent name="geometries" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.DepthOfFieldTest">
+  <component name="RunManager" selected="JUnit.DepthOfFieldTest.test10ObjectsDOF">
     <configuration name="All in ISE5783_6560_6464" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ISE5783_6560_6464" />
       <option name="PACKAGE_NAME" value="" />
@@ -112,33 +109,33 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PlaneTest.testFindGeoIntersections" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="DepthOfFieldTest.test10ObjectsDOF" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ISE5783_6560_6464" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="geometries.*" />
+          <option name="PATTERN" value="renderer.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="geometries" />
-      <option name="MAIN_CLASS_NAME" value="geometries.PlaneTest" />
-      <option name="METHOD_NAME" value="testFindGeoIntersections" />
+      <option name="PACKAGE_NAME" value="renderer" />
+      <option name="MAIN_CLASS_NAME" value="renderer.DepthOfFieldTest" />
+      <option name="METHOD_NAME" value="test10ObjectsDOF" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SphereTest.testFindGeoIntersections" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="DepthOfFieldTest.testDOF2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ISE5783_6560_6464" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="geometries.*" />
+          <option name="PATTERN" value="renderer.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="geometries" />
-      <option name="MAIN_CLASS_NAME" value="geometries.SphereTest" />
-      <option name="METHOD_NAME" value="testFindGeoIntersections" />
+      <option name="PACKAGE_NAME" value="renderer" />
+      <option name="MAIN_CLASS_NAME" value="renderer.DepthOfFieldTest" />
+      <option name="METHOD_NAME" value="testDOF2" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -146,11 +143,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.DepthOfFieldTest.test10ObjectsDOF" />
+        <item itemvalue="JUnit.DepthOfFieldTest.testDOF2" />
         <item itemvalue="JUnit.DepthOfFieldTest" />
         <item itemvalue="JUnit.All in ISE5783_6560_6464" />
         <item itemvalue="JUnit.CombinedEffectsTest.generateGlassSphere" />
-        <item itemvalue="JUnit.SphereTest.testFindGeoIntersections" />
-        <item itemvalue="JUnit.PlaneTest.testFindGeoIntersections" />
       </list>
     </recent_temporary>
   </component>
@@ -310,7 +307,14 @@
       <option name="project" value="LOCAL" />
       <updated>1685959699687</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Depth Of Field works!!!! &#10;Need to refactor and add comments, then generate a representative scene.">
+      <created>1686062073515</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1686062073515</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -344,7 +348,8 @@
     <MESSAGE value="Finished first part of targil 6." />
     <MESSAGE value="Finished part 6 with bonuses." />
     <MESSAGE value="Added test for findGeoIntersections in PlaneTest." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added test for findGeoIntersections in PlaneTest." />
+    <MESSAGE value="Depth Of Field works!!!! &#10;Need to refactor and add comments, then generate a representative scene." />
+    <option name="LAST_COMMIT_MESSAGE" value="Depth Of Field works!!!! &#10;Need to refactor and add comments, then generate a representative scene." />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
