@@ -1,9 +1,6 @@
 package renderer;
 
-import geometries.Geometries;
-import geometries.Plane;
-import geometries.Sphere;
-import geometries.Triangle;
+import geometries.*;
 import lighting.AmbientLight;
 import lighting.PointLight;
 import lighting.SpotLight;
@@ -84,7 +81,15 @@ public class DepthOfFieldTest {
                 .renderImage() //
                 .writeToImage();
 
+        camera.setApertureSize(0);
+        imageWriter = new ImageWriter("Depth Of Field Final (No DOF)", 1000, 1000);
+        camera.setImageWriter(imageWriter) //
+                .setRayTracer(new RayTracerBasic(scene)) //
+                .renderImage() //
+                .writeToImage();
+
     }
+
 
     private static final int SPHERES_IN_LINE = 5;
     private static final int SINGLE_SPHERE_RADIUS = 10;
