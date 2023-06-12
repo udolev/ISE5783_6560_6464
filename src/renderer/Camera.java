@@ -232,11 +232,11 @@ public class Camera {
         Point pixelPoint = constructPixelPoint(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
         List<Point> aperture = generateAperture(pixelPoint);
         Point focalPoint = focalPlane.findIntersections(headRay).get(0);
-        List<Ray> rayBeam = generateRayBeamToPoint(aperture, focalPoint);
+        List<Ray> rayBeam = Ray.generateRayBeamToPoint(aperture, focalPoint);
 
         for (Ray currentRay : rayBeam)
             pixelColor = pixelColor.add(rayTracer.traceRay(currentRay));
-        pixelColor = pixelColor.scale(1.0 / (numOfRaysInLine * numOfRaysInLine + 1));
+        pixelColor = pixelColor.reduce( (numOfRaysInLine * numOfRaysInLine + 1));
 
         return pixelColor;
     }
@@ -322,20 +322,5 @@ public class Camera {
         return this;
     }
 
-    /**
-     * a method to generate a beam of rays from every point in a given list to one target point.
-     *
-     * @param points the list of points
-     * @param target the target point
-     * @return a list of rays from each point to the target point
-     */
-    public List<Ray> generateRayBeamToPoint(List<Point> points, Point target) {
-        List rayBeam = new LinkedList<Ray>();
-        Vector direction;
-        for (Point point : points) {
-            direction = target.subtract(point);
-            rayBeam.add(new Ray(point, direction));
-        }
-        return rayBeam;
-    }
+
 }

@@ -110,4 +110,21 @@ public class Ray {
         if (alignZero(t - maxDistance) <= 0) return true;
         return false;
     }
+    /**
+     * a method to generate a beam of rays from every point in a given list to one target point.
+     *
+     * @param points the list of points
+     * @param target the target point
+     * @return a list of rays from each point to the target point
+     */
+
+    static public List<Ray> generateRayBeamToPoint(List<Point> points, Point target) {
+        List rayBeam = new LinkedList<Ray>();
+        Vector direction;
+        for (Point point : points) {
+            direction = target.subtract(point);
+            rayBeam.add(new Ray(point, direction));
+        }
+        return rayBeam;
+    }
 }
