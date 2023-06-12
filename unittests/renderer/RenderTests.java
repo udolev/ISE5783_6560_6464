@@ -2,10 +2,9 @@ package renderer;
 
 import static java.awt.Color.*;
 
+import geometries.*;
 import org.junit.jupiter.api.Test;
 
-import geometries.Sphere;
-import geometries.Triangle;
 import lighting.AmbientLight;
 import primitives.*;
 import renderer.*;
@@ -101,4 +100,5 @@ public class RenderTests {
         camera.printGrid(100, new Color(YELLOW));
         camera.writeToImage();
     }
+
 }

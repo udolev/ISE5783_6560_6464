@@ -2,6 +2,7 @@ package renderer;
 
 import geometries.*;
 import lighting.AmbientLight;
+import lighting.DirectionalLight;
 import lighting.PointLight;
 import lighting.SpotLight;
 import org.junit.jupiter.api.Test;
@@ -74,6 +75,8 @@ public class DepthOfFieldTest {
 
         scene.lights.add(new SpotLight(new Color(350, 200, 200), new Point(1000, 0, 400), new Vector(-1, 0, -1))//
                 .setKl(4E-5).setKq(1E-6));
+        scene.lights.add(new DirectionalLight(new Color(WHITE), new Vector(1, 0, -1)));
+        scene.lights.add(new PointLight(new Color(WHITE),new Point(0,1000,0)));
 
         ImageWriter imageWriter = new ImageWriter("Depth Of Field Final", 1000, 1000);
         camera.setImageWriter(imageWriter) //
@@ -81,15 +84,7 @@ public class DepthOfFieldTest {
                 .renderImage() //
                 .writeToImage();
 
-        camera.setApertureSize(0);
-        imageWriter = new ImageWriter("Depth Of Field Final (No DOF)", 1000, 1000);
-        camera.setImageWriter(imageWriter) //
-                .setRayTracer(new RayTracerBasic(scene)) //
-                .renderImage() //
-                .writeToImage();
-
     }
-
 
     private static final int SPHERES_IN_LINE = 5;
     private static final int SINGLE_SPHERE_RADIUS = 10;
@@ -112,4 +107,41 @@ public class DepthOfFieldTest {
         }
         return spheresCube;
     }
+
+    @Test
+    void testSpheresFloorDOF() {
+        Camera camera = new Camera(new Point(0, 200, 20), new Vector(1, 0, 0), new Vector(0, 0, 1)) //
+                .setVPSize(200, 200).setVPDistance(100);//.setApertureSize(9).setFocalPlaneDistance(110);
+
+        Scene scene = new Scene("Test scene");
+        scene.setAmbientLight(new AmbientLight(new Color(WHITE), 0.15));
+        Geometries floor = new Geometries();
+        for (int i = 0; i < 1000; i += 20) {
+            for (int j = 0; j < 1000; j += 20) {
+                floor.add(new Polygon(new Point(i, j, 0), new Point(i + 20, j, 0), new Point(i + 20, j + 20, 0), new Point(i, j + 20, 0)).
+                        setEmission((i % 40 == 0 ? ((j % 40 == 0) ? new Color(white) : new Color(BLACK)) : (j % 40 != 0) ? new Color(WHITE) : new Color(BLACK))));
+            }
+        }
+        scene.geometries.add(floor);
+        scene.geometries.add(new Sphere(20, new Point(100, 160, 20))
+                .setEmission(new Color(BLUE)).setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(301).setKr(0.5)));
+        scene.geometries.add(new Sphere(20, new Point(160, 160, 20))
+                .setEmission(new Color(RED)).setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(301).setKr(0.5)));
+        scene.geometries.add(new Sphere(20, new Point(220, 160, 20))
+                .setEmission(new Color(GREEN)).setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(301).setKr(0.5)));
+        scene.geometries.add(new Sphere(20, new Point(60, 160, 20))
+                .setEmission(new Color(75,0,130)).setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(301).setKr(0.5)));
+        scene.geometries.add(new Sphere(20, new Point(280, 160, 20))
+                .setEmission(new Color(yellow)).setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(301).setKr(0.5)));
+        scene.lights.add(new DirectionalLight(new Color(WHITE), new Vector(0, -1, 0)));
+        scene.lights.add(new DirectionalLight(new Color(WHITE), new Vector(0, 0, -1)));
+
+        ImageWriter imageWriter = new ImageWriter("Reflective Spheres on Black-White Floor", 1000, 1000);
+        camera.setImageWriter(imageWriter) //
+                .setRayTracer(new RayTracerBasic(scene)) //
+                .renderImage() //
+                .writeToImage();
+
+    }
+
 }

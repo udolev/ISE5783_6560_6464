@@ -37,8 +37,8 @@ public class Camera {
 
     // Depth Of Field features
     private double apertureSize = 0;
-
-    private int numOfRaysInLine = 9;
+    // the amount of rays in a single line or row that will be cast from the aperture
+    private int numOfRaysInLine = 5;
     private double focalDistance = 100; // from view plane
     private Plane focalPlane;
 
@@ -133,6 +133,13 @@ public class Camera {
         return new Ray(p0, pIJ.subtract(p0));
     }
 
+    /**
+     * @param nX
+     * @param nY
+     * @param j
+     * @param i
+     * @return
+     */
     private Point constructPixelPoint(int nX, int nY, int j, int i) {
         double Ry = height / nY;
         double Rx = width / nX;
@@ -213,7 +220,8 @@ public class Camera {
     }
 
     /**
-     * A method to generate a color for each pixel.
+     * A method to generate a color for each pixel. if the depth of field feature is used,
+     * will also create the ray-beam to the focal point and calculate the average color to determinate the pixel color.
      **/
     private Color castRay(int xIndex, int yIndex) {
         Ray headRay = constructRay(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
@@ -270,6 +278,11 @@ public class Camera {
         return new Vector(x * cos(Angle) - y * sin(Angle), x * sin(Angle) + y * cos(Angle), z);
     }
 
+    /**
+     * A method to generate the aperture for a pixel as a list of points.
+     *
+     * @param pixel the given pixel.
+     **/
     private List<Point> generateAperture(Point pixel) {
         if (isZero(apertureSize)) return List.of(pixel);
         List<Point> targetArea = new LinkedList<>();
@@ -286,11 +299,21 @@ public class Camera {
         return targetArea;
     }
 
+    /**
+     * Setter to initialize/set the size of the aperture.
+     *
+     * @param apertureSize the aperture size
+     **/
     public Camera setApertureSize(double apertureSize) {
         this.apertureSize = apertureSize;
         return this;
     }
 
+    /**
+     * Setter to initialize/set the distance between the view plane and the focal plane.
+     *
+     * @param focalDistance the give distance
+     **/
     public Camera setFocalPlaneDistance(double focalDistance) {
         if (isZero(focalDistance))
             throw new IllegalArgumentException("focal distance can't be zero");
@@ -299,6 +322,13 @@ public class Camera {
         return this;
     }
 
+    /**
+     * a method to generate a beam of rays from every point in a given list to one target point.
+     *
+     * @param points the list of points
+     * @param target the target point
+     * @return a list of rays from each point to the target point
+     */
     public List<Ray> generateRayBeamToPoint(List<Point> points, Point target) {
         List rayBeam = new LinkedList<Ray>();
         Vector direction;

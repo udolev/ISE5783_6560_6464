@@ -75,6 +75,11 @@ public class Ray {
         return points == null ? null : findClosestGeoPoint(points.stream().map(p -> new GeoPoint(null, p)).toList()).point;
     }
 
+    /**
+     * a method to go through a list of geopoints and find the one closest to the ray's head.
+     * @param intersections the list of points
+     * @return
+     */
     public GeoPoint findClosestGeoPoint(List<GeoPoint> intersections) {
         if (intersections == null)
             return null;
@@ -94,6 +99,12 @@ public class Ray {
         return closestGeoPoint;
     }
 
+    /**
+     * a method to check if a certain point is further away from the ray's head as a given maximum distance.
+     * @param point the given point
+     * @param maxDistance the maximum distance
+     * @return
+     */
     public boolean inRange(Point point, double maxDistance) {
         double t = p0.distance(point);
         if (alignZero(t - maxDistance) <= 0) return true;

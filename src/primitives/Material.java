@@ -106,4 +106,8 @@ public class Material {
         this.kR = new Double3(kR);
         return this;
     }
+
+    public Object setkD(Double3 double3) {
+        return null;
+    }
 }

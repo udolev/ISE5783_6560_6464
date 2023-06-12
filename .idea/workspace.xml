@@ -4,9 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="Finished Depth Of field, need to add comments.">
+    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="Depth Of Field works!!!! &#10;Need to refactor and add comments, then generate a representative scene.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/primitives/Material.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/primitives/Material.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/primitives/Ray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/primitives/Ray.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/Camera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unittests/renderer/CombinedEffectsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/renderer/CombinedEffectsTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unittests/renderer/DepthOfFieldTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/renderer/DepthOfFieldTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unittests/renderer/LightsTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/renderer/LightsTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unittests/renderer/RenderTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/renderer/RenderTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +74,7 @@
       <recent name="geometries" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.All in ISE5783_6560_6464">
+  <component name="RunManager" selected="JUnit.DepthOfFieldTest.test10ObjectsDOF">
     <configuration name="All in ISE5783_6560_6464" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ISE5783_6560_6464" />
       <option name="PACKAGE_NAME" value="" />
@@ -77,7 +83,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DepthOfFieldTest.dofTestWith" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="DepthOfFieldTest.test100ObjectsDOF" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ISE5783_6560_6464" />
       <extension name="coverage">
         <pattern>
@@ -87,23 +93,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="renderer" />
       <option name="MAIN_CLASS_NAME" value="renderer.DepthOfFieldTest" />
-      <option name="METHOD_NAME" value="dofTestWith" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="DepthOfFieldTest.dofTestWithout" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ISE5783_6560_6464" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="renderer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="renderer" />
-      <option name="MAIN_CLASS_NAME" value="renderer.DepthOfFieldTest" />
-      <option name="METHOD_NAME" value="dofTestWithout" />
+      <option name="METHOD_NAME" value="test100ObjectsDOF" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -141,12 +131,28 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="DepthOfFieldTest.testSpheresFloorDOF" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ISE5783_6560_6464" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="renderer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="renderer" />
+      <option name="MAIN_CLASS_NAME" value="renderer.DepthOfFieldTest" />
+      <option name="METHOD_NAME" value="testSpheresFloorDOF" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.All in ISE5783_6560_6464" />
-        <item itemvalue="JUnit.DepthOfFieldTest.dofTestWith" />
-        <item itemvalue="JUnit.DepthOfFieldTest.dofTestWithout" />
         <item itemvalue="JUnit.DepthOfFieldTest.test10ObjectsDOF" />
+        <item itemvalue="JUnit.DepthOfFieldTest.testSpheresFloorDOF" />
+        <item itemvalue="JUnit.DepthOfFieldTest.test100ObjectsDOF" />
+        <item itemvalue="JUnit.All in ISE5783_6560_6464" />
         <item itemvalue="JUnit.DepthOfFieldTest.testDOF2" />
       </list>
     </recent_temporary>
@@ -314,14 +320,7 @@
       <option name="project" value="LOCAL" />
       <updated>1686062073515</updated>
     </task>
-    <task id="LOCAL-00023" summary="Finished Depth Of field, need to add comments.">
-      <created>1686508377175</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1686508377175</updated>
-    </task>
-    <option name="localTasksCounter" value="24" />
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -356,8 +355,7 @@
     <MESSAGE value="Finished part 6 with bonuses." />
     <MESSAGE value="Added test for findGeoIntersections in PlaneTest." />
     <MESSAGE value="Depth Of Field works!!!! &#10;Need to refactor and add comments, then generate a representative scene." />
-    <MESSAGE value="Finished Depth Of field, need to add comments." />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished Depth Of field, need to add comments." />
+    <option name="LAST_COMMIT_MESSAGE" value="Depth Of Field works!!!! &#10;Need to refactor and add comments, then generate a representative scene." />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
