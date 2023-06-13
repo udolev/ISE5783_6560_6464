@@ -118,13 +118,13 @@ public class DepthOfFieldTest {
     @Test
     void testSpheresFloorDOF() {
         Camera camera = new Camera(new Point(40, 100, 20), new Vector(1, 1, 0), new Vector(0, 0, 1)) //
-                .setVPSize(7, 7).setVPDistance(5);//.setApertureSize(1.5).setFocalPlaneDistance(40).setNumOfRaysInLine(9);
+                .setVPSize(7, 7).setVPDistance(5).setApertureSize(1.5).setFocalPlaneDistance(40).setNumOfRaysInLine(9);
 
         Scene scene = new Scene("Test scene");
         scene.setAmbientLight(new AmbientLight(new Color(WHITE), 0.15));
         Geometries floor = new Geometries();
-        for (int i = 0; i < 300; i += 20) {
-            for (int j = 0; j < 300; j += 20) {
+        for (int i = 0; i < 500; i += 20) {
+            for (int j = 0; j < 500; j += 20) {
                 floor.add(new Polygon(new Point(i, j, 0), new Point(i + 20, j, 0), new Point(i + 20, j + 20, 0), new Point(i, j + 20, 0)).
                         setEmission((i % 40 == 0 ? ((j % 40 == 0) ? new Color(white) : new Color(BLACK)) : (j % 40 != 0) ? new Color(WHITE) : new Color(BLACK))));
             }
