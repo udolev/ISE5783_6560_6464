@@ -38,7 +38,7 @@ public class Camera {
     // Depth Of Field features
     private double apertureSize = 0;
     // the amount of rays in a single line or row that will be cast from the aperture
-    private int numOfRaysInLine = 5;
+    private int numOfRaysInLine = 9;
     private double focalDistance = 100; // from view plane
     private Plane focalPlane;
 
