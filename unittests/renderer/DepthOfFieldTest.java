@@ -40,6 +40,7 @@ public class DepthOfFieldTest {
                 .renderImage() //
                 .writeToImage();
     }
+
     //this test will generate a picture of two spheres, one in focus and without it.
     @Test
     void testDOF2() {
@@ -63,7 +64,8 @@ public class DepthOfFieldTest {
                 .renderImage() //
                 .writeToImage();
     }
-    //this test will create a picture of a cube made of blue spheres, with a green plane behind it.(DOF)
+
+    // this test will create a picture of a cube made of blue spheres, with a green plane behind it.(DOF)
     @Test
     void test10ObjectsDOF() {
         Camera camera = new Camera(new Point(400, 0, 400), new Vector(-1, 0, -1), new Vector(0, 1, 0)) //
@@ -114,22 +116,23 @@ public class DepthOfFieldTest {
         }
         return spheresCube;
     }
+
     // this test will generate a picture of 5 reflective spheres in 5 different colors, on a black and white floor (while using DOF).
     @Test
     void testSpheresFloorDOF() {
         Camera camera = new Camera(new Point(40, 100, 20), new Vector(1, 1, 0), new Vector(0, 0, 1)) //
-                .setVPSize(7, 7).setVPDistance(5).setApertureSize(1.5).setFocalPlaneDistance(40).setNumOfRaysInLine(9);
+                .setVPSize(7, 7).setVPDistance(5).setApertureSize(1.5).setFocalPlaneDistance(60).setNumOfRaysInLine(9);
 
         Scene scene = new Scene("Test scene");
         scene.setAmbientLight(new AmbientLight(new Color(WHITE), 0.15));
         Geometries floor = new Geometries();
-        for (int i = 0; i < 500; i += 20) {
-            for (int j = 0; j < 500; j += 20) {
+        for (int i = 0; i < 300; i += 20) {
+            for (int j = 0; j < 300; j += 20) {
                 floor.add(new Polygon(new Point(i, j, 0), new Point(i + 20, j, 0), new Point(i + 20, j + 20, 0), new Point(i, j + 20, 0)).
                         setEmission((i % 40 == 0 ? ((j % 40 == 0) ? new Color(white) : new Color(BLACK)) : (j % 40 != 0) ? new Color(WHITE) : new Color(BLACK))));
             }
         }
-        int shininess =301;
+        int shininess = 301;
         scene.geometries.add(floor);
         scene.geometries.add(new Sphere(20, new Point(100, 160, 20))
                 .setEmission(new Color(BLUE)).setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(shininess).setKr(0.5)));
@@ -144,7 +147,7 @@ public class DepthOfFieldTest {
         scene.lights.add(new DirectionalLight(new Color(WHITE), new Vector(0, 1, 0)));
         scene.lights.add(new DirectionalLight(new Color(white), new Vector(0, 0, -1)));
 
-        ImageWriter imageWriter = new ImageWriter("Reflective Spheres on Black-White Floor- DOF", 1000, 1000);
+        ImageWriter imageWriter = new ImageWriter("Reflective Spheres on Black-White Floor with DOF", 1000, 1000);
         camera.setImageWriter(imageWriter) //
                 .setRayTracer(new RayTracerBasic(scene)) //
                 .renderImage() //

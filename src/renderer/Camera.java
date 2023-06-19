@@ -35,16 +35,24 @@ public class Camera {
     private ImageWriter imageWriter;
     private RayTracerBase rayTracer;
 
+    private int numOfRaysInLine = 9;
+
     // Depth Of Field features
     private double apertureSize = 0;
     // the amount of rays in a single line or row that will be cast from the aperture
-    private int numOfRaysInLine = 9;
     private double focalDistance = 100; // from view plane
     private Plane focalPlane;
+
+    // Antialiasing features
+    boolean antialiasing = false;
+    double pixelWidth;
+    double pixelLength;
 
     // Setters
     public Camera setImageWriter(ImageWriter imageWriter) {
         this.imageWriter = imageWriter;
+        pixelWidth = imageWriter.getNx() / width;
+        pixelLength = imageWriter.getNy() / height;
         return this;
     }
 
@@ -226,18 +234,30 @@ public class Camera {
     private Color castRay(int xIndex, int yIndex) {
         Ray headRay = constructRay(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
         Color pixelColor = rayTracer.traceRay(headRay);
-        if (isZero(apertureSize))
-            return pixelColor;
-
         Point pixelPoint = constructPixelPoint(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
-        List<Point> aperture = generateAperture(pixelPoint);
-        Point focalPoint = focalPlane.findIntersections(headRay).get(0);
-        List<Ray> rayBeam = Ray.generateRayBeamToPoint(aperture, focalPoint);
 
-        for (Ray currentRay : rayBeam)
-            pixelColor = pixelColor.add(rayTracer.traceRay(currentRay));
-        pixelColor = pixelColor.reduce( (numOfRaysInLine * numOfRaysInLine + 1));
+        // Add depth of field
+        if (!isZero(apertureSize)) {
+            List<Point> aperture = generateAperture(pixelPoint);
+            Point focalPoint = focalPlane.findIntersections(headRay).get(0);
+            List<Ray> rayBeam = Ray.generateRayBeamToPoint(aperture, focalPoint);
 
+            for (Ray currentRay : rayBeam)
+                pixelColor = pixelColor.add(rayTracer.traceRay(currentRay));
+        }
+
+        // Add antialiasing
+        if (antialiasing) {
+            List<Point> targetArea = generateTargetArea(pixelPoint, pixelWidth, pixelLength);
+            List<Ray> rayBeam = Ray.generateRayBeamFromPoint(targetArea, p0);
+            for (Ray currentRay : rayBeam)
+                pixelColor = pixelColor.add(rayTracer.traceRay(currentRay));
+        }
+
+        if (!isZero(apertureSize) && antialiasing)
+            pixelColor = pixelColor.reduce(2 * numOfRaysInLine * numOfRaysInLine + 1);
+        else if (!isZero(apertureSize) || antialiasing)
+            pixelColor = pixelColor.reduce(numOfRaysInLine * numOfRaysInLine + 1);
         return pixelColor;
     }
 
@@ -284,16 +304,25 @@ public class Camera {
      * @param pixel the given pixel.
      **/
     private List<Point> generateAperture(Point pixel) {
-        if (isZero(apertureSize)) return List.of(pixel);
+        return generateTargetArea(pixel, apertureSize, apertureSize);
+    }
+
+    /**
+     * A method to generate a grid target area around a point.
+     *
+     * @param pixel the given pixel.
+     **/
+    private List<Point> generateTargetArea(Point pixel, double sizeX, double sizeY) {
+        if (isZero(sizeX) || isZero(sizeY)) return List.of(pixel);
         List<Point> targetArea = new LinkedList<>();
-        Point leftCorner = pixel.add(vUp.scale(apertureSize / 2)).add(vRight.scale(-apertureSize / 2));
+        Point leftCorner = pixel.add(vUp.scale(sizeY / 2)).add(vRight.scale(-sizeX / 2));
         Point current = leftCorner;
         for (int i = 0; i < numOfRaysInLine; ++i) {
             if (i != 0)
-                current = leftCorner.add(vUp.scale(-apertureSize * i / numOfRaysInLine));
+                current = leftCorner.add(vUp.scale(-sizeY * i / numOfRaysInLine));
             for (int j = 0; j < numOfRaysInLine; ++j) {
                 targetArea.add(current);
-                current = current.add(vRight.scale(apertureSize / numOfRaysInLine));
+                current = current.add(vRight.scale(sizeX / numOfRaysInLine));
             }
         }
         return targetArea;
@@ -322,5 +351,8 @@ public class Camera {
         return this;
     }
 
-
+    Camera enableAntialiasing(){
+        antialiasing = true;
+        return this;
+    }
 }

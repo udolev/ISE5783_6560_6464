@@ -77,6 +77,7 @@ public class Ray {
 
     /**
      * a method to go through a list of geopoints and find the one closest to the ray's head.
+     *
      * @param intersections the list of points
      * @return
      */
@@ -101,7 +102,8 @@ public class Ray {
 
     /**
      * a method to check if a certain point is further away from the ray's head as a given maximum distance.
-     * @param point the given point
+     *
+     * @param point       the given point
      * @param maxDistance the maximum distance
      * @return
      */
@@ -110,6 +112,7 @@ public class Ray {
         if (alignZero(t - maxDistance) <= 0) return true;
         return false;
     }
+
     /**
      * a method to generate a beam of rays from every point in a given list to one target point.
      *
@@ -124,6 +127,23 @@ public class Ray {
         for (Point point : points) {
             direction = target.subtract(point);
             rayBeam.add(new Ray(point, direction));
+        }
+        return rayBeam;
+    }
+
+    /**
+     * a method to generate a beam of rays from a head point to a given list of points.
+     *
+     * @param points the list of points
+     * @param head the head point
+     * @return a list of rays to each point from the head point
+     */
+    static public List<Ray> generateRayBeamFromPoint(List<Point> points, Point head) {
+        List rayBeam = new LinkedList<Ray>();
+        Vector direction;
+        for (Point point : points) {
+            direction = point.subtract(head);
+            rayBeam.add(new Ray(head, direction));
         }
         return rayBeam;
     }

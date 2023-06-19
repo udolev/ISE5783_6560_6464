@@ -1,6 +1,8 @@
 package primitives;
 
 import java.lang.Math;
+import java.util.LinkedList;
+import java.util.List;
 
 /** This will represent a point in a 3D world.
  * The class will be used for basic operations related to points, such as: add, subtract etc.
