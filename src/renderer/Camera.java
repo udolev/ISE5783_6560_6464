@@ -254,11 +254,12 @@ public class Camera {
             // Add antialiasing
             if (antialiasing) {
                 pixelColor.add(calcAdaptiveSuperSampling(p0, pixelPoint, pixelWidth, pixelLength));
-                if (!isZero(apertureSize) && antialiasing)
-                    pixelColor = pixelColor.reduce(3);
-                else if (!isZero(apertureSize) || antialiasing)
-                    pixelColor = pixelColor.reduce(2);
             }
+
+            if (!isZero(apertureSize) && antialiasing)
+                pixelColor = pixelColor.reduce(3);
+            else if (!isZero(apertureSize) || antialiasing)
+                pixelColor = pixelColor.reduce(2);
 
         } else {
             // Add depth of field

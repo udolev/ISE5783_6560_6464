@@ -15,12 +15,12 @@ import static java.awt.Color.*;
  * this class will be used to test the depth of field feature.
  */
 public class DepthOfFieldTest {
-    //this test will generate a sphere and a triangle behind it, while the focus is on the sphere
+    // This test will generate a sphere and a triangle behind it, while the focus is on the sphere
     @Test
     void testDOF() {
         Camera camera = new Camera(new Point(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
                 .setVPSize(200, 200).setVPDistance(700).
-                setApertureSize(10).setFocalPlaneDistance(300);
+                setApertureSize(10).setFocalPlaneDistance(300).enableAdaptiveSuperSampling();
         Scene scene = new Scene("Test scene");
         scene.setAmbientLight(new AmbientLight(new Color(WHITE), 0.15));
 
