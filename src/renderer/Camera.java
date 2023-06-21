@@ -48,6 +48,13 @@ public class Camera {
     double pixelWidth;
     double pixelLength;
 
+    // Multi Threads
+    int threadsCount = 3;
+
+    // Adaptive Super Sampling
+    int maxLevel = 4;
+    boolean adaptiveSuperSampling = false;
+
     // Setters
     public Camera setImageWriter(ImageWriter imageWriter) {
         this.imageWriter = imageWriter;
@@ -204,7 +211,7 @@ public class Camera {
      * @param interval the size of each hex in the grid.
      * @param color    the color of the line of the grid.
      **/
-    public void printGrid(int interval, Color color) {
+    public Camera printGrid(int interval, Color color) {
         if (imageWriter == null)
             throw new MissingResourceException("ImageWriter missing", "ImageWriter", "imageWriter");
         int nX = imageWriter.getNx();
@@ -215,6 +222,7 @@ public class Camera {
                     imageWriter.writePixel(j, i, color);
 
         imageWriter.writeToImage();
+        return this;
     }
 
     /**
@@ -236,29 +244,116 @@ public class Camera {
         Color pixelColor = rayTracer.traceRay(headRay);
         Point pixelPoint = constructPixelPoint(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
 
-        // Add depth of field
-        if (!isZero(apertureSize)) {
-            List<Point> aperture = generateAperture(pixelPoint);
-            Point focalPoint = focalPlane.findIntersections(headRay).get(0);
-            List<Ray> rayBeam = Ray.generateRayBeamToPoint(aperture, focalPoint);
+        if (adaptiveSuperSampling) {
+            // Add depth of field
+            if (!isZero(apertureSize)) {
+                Point focalPoint = focalPlane.findIntersections(headRay).get(0);
+                pixelColor.add(calcAdaptiveSuperSampling(pixelPoint, focalPoint, apertureSize, apertureSize));
+            }
 
-            for (Ray currentRay : rayBeam)
-                pixelColor = pixelColor.add(rayTracer.traceRay(currentRay));
+            // Add antialiasing
+            if (antialiasing) {
+                pixelColor.add(calcAdaptiveSuperSampling(p0, pixelPoint, pixelWidth, pixelLength));
+                if (!isZero(apertureSize) && antialiasing)
+                    pixelColor = pixelColor.reduce(3);
+                else if (!isZero(apertureSize) || antialiasing)
+                    pixelColor = pixelColor.reduce(2);
+            }
+
+        } else {
+            // Add depth of field
+            if (!isZero(apertureSize)) {
+                List<Point> aperture = generateAperture(pixelPoint);
+                Point focalPoint = focalPlane.findIntersections(headRay).get(0);
+                List<Ray> rayBeam = Ray.generateRayBeamToPoint(aperture, focalPoint);
+
+                for (Ray currentRay : rayBeam)
+                    pixelColor = pixelColor.add(rayTracer.traceRay(currentRay));
+            }
+
+            // Add antialiasing
+            if (antialiasing) {
+                List<Point> targetArea = generateTargetArea(pixelPoint, pixelWidth, pixelLength);
+                List<Ray> rayBeam = Ray.generateRayBeamFromPoint(targetArea, p0);
+                for (Ray currentRay : rayBeam)
+                    pixelColor = pixelColor.add(rayTracer.traceRay(currentRay));
+            }
+
+            if (!isZero(apertureSize) && antialiasing)
+                pixelColor = pixelColor.reduce(2 * numOfRaysInLine * numOfRaysInLine + 1);
+            else if (!isZero(apertureSize) || antialiasing)
+                pixelColor = pixelColor.reduce(numOfRaysInLine * numOfRaysInLine + 1);
         }
-
-        // Add antialiasing
-        if (antialiasing) {
-            List<Point> targetArea = generateTargetArea(pixelPoint, pixelWidth, pixelLength);
-            List<Ray> rayBeam = Ray.generateRayBeamFromPoint(targetArea, p0);
-            for (Ray currentRay : rayBeam)
-                pixelColor = pixelColor.add(rayTracer.traceRay(currentRay));
-        }
-
-        if (!isZero(apertureSize) && antialiasing)
-            pixelColor = pixelColor.reduce(2 * numOfRaysInLine * numOfRaysInLine + 1);
-        else if (!isZero(apertureSize) || antialiasing)
-            pixelColor = pixelColor.reduce(numOfRaysInLine * numOfRaysInLine + 1);
         return pixelColor;
+    }
+
+    Color calcAdaptiveSuperSampling(Point head, Point targetCenter, double sizeX, double sizeY) {
+        Point leftUp = head.add(vUp.scale(sizeY / 2)).add(vRight.scale(-sizeX / 2));
+        Point leftDown = head.add(vUp.scale(-sizeY / 2)).add(vRight.scale(-sizeX / 2));
+        Point rightUp = head.add(vUp.scale(sizeY / 2)).add(vRight.scale(sizeX / 2));
+        Point rightDown = head.add(vUp.scale(-sizeY / 2)).add(vRight.scale(sizeX / 2));
+
+        Color leftUpColor = rayTracer.traceRay(new Ray(leftUp, targetCenter.subtract(leftUp)));
+        Color leftDownColor = rayTracer.traceRay(new Ray(leftDown, targetCenter.subtract(leftDown)));
+        Color rightUpColor = rayTracer.traceRay(new Ray(rightUp, targetCenter.subtract(rightUp)));
+        Color rightDownColor = rayTracer.traceRay(new Ray(rightDown, targetCenter.subtract(rightDown)));
+
+        if (leftUpColor.equals(leftDownColor) && leftUpColor.equals(rightUpColor) && leftUpColor.equals(rightDownColor))
+            return leftUpColor;
+
+        return calcAdaptiveSuperSampling(head.add(vUp.scale(sizeY / 4)).add(vRight.scale(-sizeX / 4)), targetCenter, sizeX / 4, sizeY / 4, 2, leftUpColor, "leftUp").
+                add(calcAdaptiveSuperSampling(head.add(vUp.scale(-sizeY / 4)).add(vRight.scale(-sizeX / 4)), targetCenter, sizeX / 4, sizeY / 4, 2, leftDownColor, "leftDown"),
+                        calcAdaptiveSuperSampling(head.add(vUp.scale(sizeY / 4)).add(vRight.scale(sizeX / 4)), targetCenter, sizeX / 4, sizeY / 4, 2, rightUpColor, "rightUp"),
+                        calcAdaptiveSuperSampling(head.add(vUp.scale(-sizeY / 4)).add(vRight.scale(sizeX / 4)), targetCenter, sizeX / 4, sizeY / 4, 2, rightDownColor, "rightDown")).reduce(4);
+    }
+
+    Color calcAdaptiveSuperSampling(Point head, Point targetCenter, double sizeX, double sizeY, int level, Color calculatedColor, String calculatedCorner) {
+        Color leftUpColor, leftDownColor, rightUpColor, rightDownColor;
+        if (calculatedCorner == "leftUp") {
+            Point leftDown = head.add(vUp.scale(-sizeY)).add(vRight.scale(-sizeX));
+            Point rightUp = head.add(vUp.scale(sizeY)).add(vRight.scale(sizeX));
+            Point rightDown = head.add(vUp.scale(-sizeY)).add(vRight.scale(sizeX));
+
+            leftUpColor = calculatedColor;
+            leftDownColor = rayTracer.traceRay(new Ray(leftDown, targetCenter.subtract(leftDown)));
+            rightUpColor = rayTracer.traceRay(new Ray(rightUp, targetCenter.subtract(rightUp)));
+            rightDownColor = rayTracer.traceRay(new Ray(rightDown, targetCenter.subtract(rightDown)));
+
+        } else if (calculatedCorner == "leftDown") {
+            Point leftUp = head.add(vUp.scale(sizeY)).add(vRight.scale(-sizeX));
+            Point rightUp = head.add(vUp.scale(sizeY)).add(vRight.scale(sizeX));
+            Point rightDown = head.add(vUp.scale(-sizeY)).add(vRight.scale(sizeX));
+
+            leftUpColor = rayTracer.traceRay(new Ray(leftUp, targetCenter.subtract(leftUp)));
+            leftDownColor = calculatedColor;
+            rightUpColor = rayTracer.traceRay(new Ray(rightUp, targetCenter.subtract(rightUp)));
+            rightDownColor = rayTracer.traceRay(new Ray(rightDown, targetCenter.subtract(rightDown)));
+        } else if (calculatedCorner == "rightUp") {
+            Point leftUp = head.add(vUp.scale(sizeY)).add(vRight.scale(-sizeX));
+            Point leftDown = head.add(vUp.scale(-sizeY)).add(vRight.scale(-sizeX));
+            Point rightDown = head.add(vUp.scale(-sizeY)).add(vRight.scale(sizeX));
+
+            leftUpColor = rayTracer.traceRay(new Ray(leftUp, targetCenter.subtract(leftUp)));
+            leftDownColor = rayTracer.traceRay(new Ray(leftDown, targetCenter.subtract(leftDown)));
+            rightUpColor = calculatedColor;
+            rightDownColor = rayTracer.traceRay(new Ray(rightDown, targetCenter.subtract(rightDown)));
+        } else {
+            Point leftUp = head.add(vUp.scale(sizeY)).add(vRight.scale(-sizeX));
+            Point leftDown = head.add(vUp.scale(-sizeY)).add(vRight.scale(-sizeX));
+            Point rightUp = head.add(vUp.scale(sizeY)).add(vRight.scale(sizeX));
+
+            leftUpColor = rayTracer.traceRay(new Ray(leftUp, targetCenter.subtract(leftUp)));
+            leftDownColor = rayTracer.traceRay(new Ray(leftDown, targetCenter.subtract(leftDown)));
+            rightUpColor = rayTracer.traceRay(new Ray(rightUp, targetCenter.subtract(rightUp)));
+            rightDownColor = calculatedColor;
+        }
+        if (level == maxLevel + 1 || leftUpColor.equals(leftDownColor) && leftUpColor.equals(rightUpColor) && leftUpColor.equals(rightDownColor))
+            return leftUpColor.add(leftDownColor, rightUpColor, rightDownColor).reduce(4);
+
+        return calcAdaptiveSuperSampling(head.add(vUp.scale(sizeY / 2)).add(vRight.scale(-sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, 2, leftUpColor, "leftUp").
+                add(calcAdaptiveSuperSampling(head.add(vUp.scale(-sizeY / 2)).add(vRight.scale(-sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, 2, leftDownColor, "leftDown"),
+                        calcAdaptiveSuperSampling(head.add(vUp.scale(sizeY / 4)).add(vRight.scale(sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, 2, rightUpColor, "rightUp"),
+                        calcAdaptiveSuperSampling(head.add(vUp.scale(-sizeY / 4)).add(vRight.scale(sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, 2, rightDownColor, "rightDown")).reduce(4);
     }
 
     /**
@@ -351,8 +446,13 @@ public class Camera {
         return this;
     }
 
-    Camera enableAntialiasing(){
+    Camera enableAntialiasing() {
         antialiasing = true;
+        return this;
+    }
+
+    Camera setMultithreading(int numOfThreads) {
+        threadsCount = numOfThreads;
         return this;
     }
 }
