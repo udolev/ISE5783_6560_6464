@@ -69,7 +69,7 @@ public class DepthOfFieldTest {
     @Test
     void test10ObjectsDOF() {
         Camera camera = new Camera(new Point(400, 0, 400), new Vector(-1, 0, -1), new Vector(0, 1, 0)) //
-                .setVPSize(200, 200).setVPDistance(300).setApertureSize(8).setFocalPlaneDistance(185).setNumOfRaysInLine(5);
+                .setVPSize(200, 200).setVPDistance(300).setApertureSize(8).setFocalPlaneDistance(185).enableAdaptiveSuperSampling();
 
         Scene scene = new Scene("Test scene");
         scene.setAmbientLight(new AmbientLight(new Color(WHITE), 0.15));

@@ -451,6 +451,11 @@ public class Camera {
         return this;
     }
 
+    Camera enableAdaptiveSuperSampling() {
+        adaptiveSuperSampling = true;
+        return this;
+    }
+
     Camera setMultithreading(int numOfThreads) {
         threadsCount = numOfThreads;
         return this;
