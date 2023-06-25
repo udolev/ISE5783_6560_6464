@@ -52,8 +52,21 @@ public class Camera {
     int threadsCount = 3;
 
     // Adaptive Super Sampling
-    int maxLevel = 4;
+    int maxLevel = 3;
     boolean adaptiveSuperSampling = false;
+    private PixelManager pixelManager;
+    double printInterval;
+
+    public double getPrintInterval() {
+        return printInterval;
+    }
+
+    public Camera setDebugPrint(double printInterval) {
+        this.printInterval = printInterval;
+        return this;
+    }
+
+
 
     // Setters
     public Camera setImageWriter(ImageWriter imageWriter) {
@@ -192,17 +205,37 @@ public class Camera {
     /**
      * A method to generate a color for every pixel in th view plane.
      **/
-    public ImageWriter renderImage() {
+    public Camera renderImage() {
         if (p0 == null || vUp == null || vTo == null || vRight == null || height == 0 || width == 0 || imageWriter == null || rayTracer == null)
             throw new MissingResourceException("A resource is missing", "", "");
 
         int nX = imageWriter.getNx();
         int nY = imageWriter.getNy();
-        for (int j = 0; j < nX; ++j)
-            for (int i = 0; i < nY; ++i) {
-                imageWriter.writePixel(j, i, castRay(j, i));
+        pixelManager = new PixelManager(nY, nX, printInterval);
+        if (threadsCount == 0) {
+            for (int j = 0; j < nX; ++j)
+                for (int i = 0; i < nY; ++i) {
+                    imageWriter.writePixel(j, i, castRay(j, i));
+                }
+        } else {
+            var threads = new LinkedList<Thread>(); // list of threads
+            while (threadsCount-- > 0) // add appropriate number of threads
+                threads.add(new Thread(() -> { // add a thread with its code
+                    PixelManager.Pixel pixel; // current pixel(row,col)
+                    // allocate pixel(row,col) in loop until there are no more pixels
+                    while ((pixel = pixelManager.nextPixel()) != null)
+                        // cast ray through pixel (and color it – inside castRay)
+                        castRay(nX, nY, pixel.col(), pixel.row());
+                }));
+            // start all the threads
+            for (var thread : threads) thread.start();
+            // wait until all the threads have finished
+            try {
+                for (var thread : threads) thread.join();
+            } catch (InterruptedException ignore) {
             }
-        return imageWriter;
+        }
+        return this;
     }
 
     /**
@@ -239,6 +272,70 @@ public class Camera {
      * A method to generate a color for each pixel. if the depth of field feature is used,
      * will also create the ray-beam to the focal point and calculate the average color to determinate the pixel color.
      **/
+    /**
+     * private Color castRay(int xIndex, int yIndex) {
+     * Ray headRay = constructRay(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
+     * Color pixelColor = rayTracer.traceRay(headRay);
+     * Point pixelPoint = constructPixelPoint(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
+     * <p>
+     * if (adaptiveSuperSampling) {
+     * // Add depth of field
+     * if (!isZero(apertureSize)) {
+     * Point focalPoint = focalPlane.findIntersections(headRay).get(0);
+     * Color c = calcAdaptiveSuperSampling(pixelPoint, focalPoint, apertureSize, apertureSize);
+     * pixelColor = pixelColor.add(calcAdaptiveSuperSampling(pixelPoint, focalPoint, apertureSize, apertureSize));
+     * }
+     * <p>
+     * // Add antialiasing
+     * if (antialiasing) {
+     * pixelColor.add(calcAdaptiveSuperSampling(p0, pixelPoint, pixelWidth, pixelLength));
+     * }
+     * <p>
+     * if (!isZero(apertureSize) && antialiasing)
+     * pixelColor = pixelColor.reduce(3);
+     * else if (!isZero(apertureSize) || antialiasing)
+     * pixelColor = pixelColor.reduce(2);
+     * <p>
+     * } else {
+     * // Add depth of field
+     * if (!isZero(apertureSize)) {
+     * List<Point> aperture = generateAperture(pixelPoint);
+     * Point focalPoint = focalPlane.findIntersections(headRay).get(0);
+     * List<Ray> rayBeam = Ray.generateRayBeamToPoint(aperture, focalPoint);
+     * <p>
+     * for (Ray currentRay : rayBeam)
+     * pixelColor = pixelColor.add(rayTracer.traceRay(currentRay));
+     * }
+     * <p>
+     * // Add antialiasing
+     * if (antialiasing) {
+     * List<Point> targetArea = generateTargetArea(pixelPoint, pixelWidth, pixelLength);
+     * List<Ray> rayBeam = Ray.generateRayBeamFromPoint(targetArea, p0);
+     * for (Ray currentRay : rayBeam)
+     * pixelColor = pixelColor.add(rayTracer.traceRay(currentRay));
+     * }
+     * <p>
+     * if (!isZero(apertureSize) && antialiasing)
+     * pixelColor = pixelColor.reduce(2 * numOfRaysInLine * numOfRaysInLine + 1);
+     * else if (!isZero(apertureSize) || antialiasing)
+     * pixelColor = pixelColor.reduce(numOfRaysInLine * numOfRaysInLine + 1);
+     * }
+     * return pixelColor;
+     * }
+     */
+    /**
+     * Cast ray from camera and color a pixel
+     *
+     * @param nX  resolution on X axis (number of pixels in row)
+     * @param nY  resolution on Y axis (number of pixels in column)
+     * @param col pixel's column number (pixel index in row)
+     * @param row pixel's row number (pixel index in column)
+     */
+    private void castRay(int nX, int nY, int col, int row) {
+        imageWriter.writePixel(col, row, rayTracer.traceRay(constructRay(nX, nY, col, row)));
+        pixelManager.pixelDone();
+    }
+
     private Color castRay(int xIndex, int yIndex) {
         Ray headRay = constructRay(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
         Color pixelColor = rayTracer.traceRay(headRay);
@@ -248,7 +345,8 @@ public class Camera {
             // Add depth of field
             if (!isZero(apertureSize)) {
                 Point focalPoint = focalPlane.findIntersections(headRay).get(0);
-                pixelColor.add(calcAdaptiveSuperSampling(pixelPoint, focalPoint, apertureSize, apertureSize));
+                Color c = calcAdaptiveSuperSampling(pixelPoint, focalPoint, apertureSize, apertureSize);
+                pixelColor = pixelColor.add(calcAdaptiveSuperSampling(pixelPoint, focalPoint, apertureSize, apertureSize));
             }
 
             // Add antialiasing
@@ -351,10 +449,31 @@ public class Camera {
         if (level == maxLevel + 1 || leftUpColor.equals(leftDownColor) && leftUpColor.equals(rightUpColor) && leftUpColor.equals(rightDownColor))
             return leftUpColor.add(leftDownColor, rightUpColor, rightDownColor).reduce(4);
 
-        return calcAdaptiveSuperSampling(head.add(vUp.scale(sizeY / 2)).add(vRight.scale(-sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, 2, leftUpColor, "leftUp").
-                add(calcAdaptiveSuperSampling(head.add(vUp.scale(-sizeY / 2)).add(vRight.scale(-sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, 2, leftDownColor, "leftDown"),
-                        calcAdaptiveSuperSampling(head.add(vUp.scale(sizeY / 4)).add(vRight.scale(sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, 2, rightUpColor, "rightUp"),
-                        calcAdaptiveSuperSampling(head.add(vUp.scale(-sizeY / 4)).add(vRight.scale(sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, 2, rightDownColor, "rightDown")).reduce(4);
+        return calcAdaptiveSuperSampling(head.add(vUp.scale(sizeY / 2)).add(vRight.scale(-sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, level + 1, leftUpColor, "leftUp").
+                add(calcAdaptiveSuperSampling(head.add(vUp.scale(-sizeY / 2)).add(vRight.scale(-sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, level + 1, leftDownColor, "leftDown"),
+                        calcAdaptiveSuperSampling(head.add(vUp.scale(sizeY / 4)).add(vRight.scale(sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, level + 1, rightUpColor, "rightUp"),
+                        calcAdaptiveSuperSampling(head.add(vUp.scale(-sizeY / 4)).add(vRight.scale(sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, level + 1, rightDownColor, "rightDown")).reduce(4);
+    }
+
+    Color calcsupersampling(Point leftTop, Color leftTopColor, Point leftBottom, Color leftBottomColor, Point rightTop, Color rightTopColor, Point rightBottom, Color rightBottomColor, int level, Point target) {
+
+        if (leftBottomColor == rightBottomColor && leftBottomColor == leftTopColor && leftBottomColor == rightTopColor)
+            return leftTopColor;
+        Point top = leftTop.add(vRight.scale(leftTop.distance(rightTop) / 2));
+        Point bottom = leftBottom.add(vRight.scale(leftBottom.distance(rightBottom) / 2));
+        Point left = leftBottom.add(vUp.scale(leftBottom.distance(leftTop) / 2));
+        Point right = rightBottom.add(vUp.scale(rightBottom.distance(rightTop) / 2));
+        Point middle = leftBottom.add(vUp.scale(leftBottom.distance(leftTop) / 2)).add(vRight.scale(leftBottom.distance(rightBottom) / 2));
+        Color topColor = rayTracer.traceRay(new Ray(top, target.subtract(top)));
+        Color bottomColor = rayTracer.traceRay(new Ray(bottom, target.subtract(bottom)));
+        Color leftColor = rayTracer.traceRay(new Ray(left, target.subtract(left)));
+        Color rightColor = rayTracer.traceRay(new Ray(right, target.subtract(right)));
+        Color middleColor = rayTracer.traceRay(new Ray(middle, target.subtract(middle)));
+        Color sq1 = calcsupersampling(leftTop, leftTopColor, left, leftColor, top, topColor, middle, middleColor, level - 1, target);
+        Color sq2 = calcsupersampling(top, topColor, middle, middleColor, rightTop, rightTopColor, right, rightColor, level - 1, target);
+        Color sq3 = calcsupersampling(left, leftColor, leftBottom, leftBottomColor, middle, middleColor, bottom, bottomColor, level - 1, target);
+        Color sq4 = calcsupersampling(middle, middleColor, bottom, bottomColor, right, rightColor, rightBottom, rightBottomColor, level - 1, target);
+        return (sq1.add(sq2).add(sq3).add(sq4)).reduce(4);
     }
 
     /**
@@ -457,7 +576,7 @@ public class Camera {
         return this;
     }
 
-    Camera setMultithreading(int numOfThreads) {
+    public Camera setMultithreading(int numOfThreads) {
         threadsCount = numOfThreads;
         return this;
     }

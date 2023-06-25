@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="Added adaptive super sampling (without comments).">
+      <change afterPath="$PROJECT_DIR$/unittests/special/TeapotTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/Camera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/Pixel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/Pixel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unittests/renderer/DepthOfFieldTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/renderer/DepthOfFieldTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,39 +71,7 @@
       <recent name="geometries" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.DepthOfFieldTest.testDOF">
-    <configuration name="AntialiasingTest.testShadowWithAntialiasing" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ISE5783_6560_6464" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="renderer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="renderer" />
-      <option name="MAIN_CLASS_NAME" value="renderer.AntialiasingTest" />
-      <option name="METHOD_NAME" value="testShadowWithAntialiasing" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CombinedEffectsTest.generateTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ISE5783_6560_6464" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="renderer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="renderer" />
-      <option name="MAIN_CLASS_NAME" value="renderer.CombinedEffectsTest" />
-      <option name="METHOD_NAME" value="generateTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.TeapotTest (1)">
     <configuration name="DepthOfFieldTest.test10ObjectsDOF" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ISE5783_6560_6464" />
       <extension name="coverage">
@@ -134,6 +104,37 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="DepthOfFieldTest.testSpheresFloorDOF" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ISE5783_6560_6464" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="renderer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="renderer" />
+      <option name="MAIN_CLASS_NAME" value="renderer.DepthOfFieldTest" />
+      <option name="METHOD_NAME" value="testSpheresFloorDOF" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TeapotTest (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ISE5783_6560_6464" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="unittests.special.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="unittests.special" />
+      <option name="MAIN_CLASS_NAME" value="unittests.special.TeapotTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="TeapotTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ISE5783_6560_6464" />
       <extension name="coverage">
@@ -151,11 +152,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.DepthOfFieldTest.testDOF" />
+        <item itemvalue="JUnit.TeapotTest (1)" />
+        <item itemvalue="JUnit.DepthOfFieldTest.testSpheresFloorDOF" />
         <item itemvalue="JUnit.DepthOfFieldTest.test10ObjectsDOF" />
+        <item itemvalue="JUnit.DepthOfFieldTest.testDOF" />
         <item itemvalue="JUnit.TeapotTest" />
-        <item itemvalue="JUnit.AntialiasingTest.testShadowWithAntialiasing" />
-        <item itemvalue="JUnit.CombinedEffectsTest.generateTest" />
       </list>
     </recent_temporary>
   </component>
@@ -357,14 +358,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687372176094</updated>
     </task>
-    <task id="LOCAL-00028" summary="Added adaptive super sampling (without comments).">
-      <created>1687372325938</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1687372325938</updated>
-    </task>
-    <option name="localTasksCounter" value="29" />
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

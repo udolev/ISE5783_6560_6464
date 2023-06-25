@@ -34,7 +34,7 @@ public class DepthOfFieldTest {
         scene.lights.add(new SpotLight(new Color(350, 200, 200), new Point(0, 0, 500), new Vector(0, 0, -1)) //
                 .setKl(4E-5).setKq(1E-6));
 
-        ImageWriter imageWriter = new ImageWriter("Depth of field", 1000, 1000);
+        ImageWriter imageWriter = new ImageWriter("Depth of field without", 1000, 1000);
         camera.setImageWriter(imageWriter) //
                 .setRayTracer(new RayTracerBasic(scene)) //
                 .renderImage() //
@@ -126,8 +126,8 @@ public class DepthOfFieldTest {
         Scene scene = new Scene("Test scene");
         scene.setAmbientLight(new AmbientLight(new Color(WHITE), 0.15));
         Geometries floor = new Geometries();
-        for (int i = 0; i < 300; i += 20) {
-            for (int j = 0; j < 300; j += 20) {
+        for (int i = 0; i < 500; i += 20) {
+            for (int j = 0; j <500; j += 20) {
                 floor.add(new Polygon(new Point(i, j, 0), new Point(i + 20, j, 0), new Point(i + 20, j + 20, 0), new Point(i, j + 20, 0)).
                         setEmission((i % 40 == 0 ? ((j % 40 == 0) ? new Color(white) : new Color(BLACK)) : (j % 40 != 0) ? new Color(WHITE) : new Color(BLACK))));
             }
