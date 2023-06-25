@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="Added adaptive super sampling (without comments).">
-      <change afterPath="$PROJECT_DIR$/unittests/special/TeapotTest.java" afterDir="false" />
+    <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="multi-threads added to the project">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/Camera.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/Pixel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/Pixel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unittests/renderer/DepthOfFieldTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/renderer/DepthOfFieldTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unittests/special/TeapotTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/special/TeapotTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -358,7 +355,14 @@
       <option name="project" value="LOCAL" />
       <updated>1687372176094</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL‎-00028" summary="multi-threads added to the project">
+      <created>1687701443359</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL‎-00028" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1687701443359</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -396,7 +400,8 @@
     <MESSAGE value="Depth Of Field tests completed, notes added for targil 8" />
     <MESSAGE value="Finished antialiasing added Pixel class." />
     <MESSAGE value="Added adaptive super sampling (without comments)." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added adaptive super sampling (without comments)." />
+    <MESSAGE value="multi-threads added to the project" />
+    <option name="LAST_COMMIT_MESSAGE" value="multi-threads added to the project" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
