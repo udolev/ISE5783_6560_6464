@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="multi-threads added to the project">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/primitives/Color.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/primitives/Color.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/Camera.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unittests/renderer/AntialiasingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/renderer/AntialiasingTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unittests/renderer/DepthOfFieldTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/renderer/DepthOfFieldTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unittests/special/TeapotTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/special/TeapotTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -374,7 +370,14 @@
       <option name="project" value="LOCAL‎" />
       <updated>1687703578032</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL‎-00030" summary="multi-threads added to the project">
+      <created>1687779952406</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL‎-00030" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1687779952406</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

@@ -354,8 +354,8 @@ public class Camera {
         Color rightUpColor = rayTracer.traceRay(new Ray(rightUp, targetPoint.subtract(rightUp)));
         Color rightDownColor = rayTracer.traceRay(new Ray(rightDown, targetPoint.subtract(rightDown)));
 
-        double minSizeX = sizeX / numOfRaysInLine;
-        double minSizeY = sizeY / numOfRaysInLine;
+        double minSizeX = sizeX / (numOfRaysInLine-1);
+        double minSizeY = sizeY / (numOfRaysInLine-1);
 
         return calcAdaptiveSuperSamplingRec(leftUp, leftUpColor, leftDown, leftDownColor, rightUp, rightUpColor, rightDown, rightDownColor, sizeX, sizeY, minSizeX, minSizeY, targetPoint);
     }
