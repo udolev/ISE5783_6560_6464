@@ -34,7 +34,7 @@ public class DepthOfFieldTest {
         scene.lights.add(new SpotLight(new Color(350, 200, 200), new Point(0, 0, 500), new Vector(0, 0, -1)) //
                 .setKl(4E-5).setKq(1E-6));
 
-        ImageWriter imageWriter = new ImageWriter("Depth of field without", 1000, 1000);
+        ImageWriter imageWriter = new ImageWriter("Depth of field with adaptive super sampling", 1000, 1000);
         camera.setImageWriter(imageWriter) //
                 .setRayTracer(new RayTracerBasic(scene)) //
                 .renderImage() //
@@ -46,7 +46,7 @@ public class DepthOfFieldTest {
     void testDOF2() {
         Camera camera = new Camera(new Point(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
                 .setVPSize(200, 200).setVPDistance(700).
-                setApertureSize(10).setFocalPlaneDistance(350);
+                setApertureSize(10).setFocalPlaneDistance(350).enableAdaptiveSuperSampling();;
         Scene scene = new Scene("Test scene");
         scene.setAmbientLight(new AmbientLight(new Color(WHITE), 0.15));
 
@@ -121,13 +121,13 @@ public class DepthOfFieldTest {
     @Test
     void testSpheresFloorDOF() {
         Camera camera = new Camera(new Point(40, 100, 20), new Vector(1, 1, 0), new Vector(0, 0, 1)) //
-                .setVPSize(7, 7).setVPDistance(5).setApertureSize(1.5).setFocalPlaneDistance(60).setNumOfRaysInLine(9);
+                .setVPSize(7, 7).setVPDistance(5).setApertureSize(1.5).setFocalPlaneDistance(60).setNumOfRaysInLine(9).enableAdaptiveSuperSampling();
 
         Scene scene = new Scene("Test scene");
         scene.setAmbientLight(new AmbientLight(new Color(WHITE), 0.15));
         Geometries floor = new Geometries();
-        for (int i = 0; i < 500; i += 20) {
-            for (int j = 0; j <500; j += 20) {
+        for (int i = 0; i < 300; i += 20) {
+            for (int j = 0; j <300; j += 20) {
                 floor.add(new Polygon(new Point(i, j, 0), new Point(i + 20, j, 0), new Point(i + 20, j + 20, 0), new Point(i, j + 20, 0)).
                         setEmission((i % 40 == 0 ? ((j % 40 == 0) ? new Color(white) : new Color(BLACK)) : (j % 40 != 0) ? new Color(WHITE) : new Color(BLACK))));
             }
@@ -144,8 +144,13 @@ public class DepthOfFieldTest {
                 .setEmission(new Color(75, 0, 130)).setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(shininess).setKr(0.5)));
         scene.geometries.add(new Sphere(20, new Point(220, 160, 20))
                 .setEmission(new Color(yellow)).setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(shininess).setKr(0.5)));
-        scene.lights.add(new DirectionalLight(new Color(WHITE), new Vector(0, 1, 0)));
-        scene.lights.add(new DirectionalLight(new Color(white), new Vector(0, 0, -1)));
+        scene.lights.add(new SpotLight(new Color(WHITE).scale(0.1),new Point(100,160,1200), new Vector(0, 0, -1)));
+        scene.lights.add(new SpotLight(new Color(WHITE).scale(0.1),new Point(180, 160,1200), new Vector(0, 0, -1)));
+        scene.lights.add(new SpotLight(new Color(WHITE).scale(0.1),new Point(140, 160,1200), new Vector(0, 0, -1)));
+        scene.lights.add(new SpotLight(new Color(WHITE).scale(0.1),new Point(60, 160,1200), new Vector(0, 0, -1)));
+        scene.lights.add(new SpotLight(new Color(WHITE).scale(0.1),new Point(220, 160,1200), new Vector(0, 0, -1)));
+
+        scene.lights.add(new DirectionalLight(new Color(white), new Vector(0, 1, 0)));
 
         ImageWriter imageWriter = new ImageWriter("Reflective Spheres on Black-White Floor with DOF", 1000, 1000);
         camera.setImageWriter(imageWriter) //

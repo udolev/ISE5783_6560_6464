@@ -43,7 +43,7 @@ public class AntialiasingTest {
     private final Scene scene1 = new Scene("Test scene").setBackground(new Color(WHITE));
     private final Camera camera1 = new Camera(new Point(0, 0, 1000),
             new Vector(0, 0, -1), new Vector(0, 1, 0))
-            .setVPSize(200, 200).setVPDistance(1500);//.enableAntialiasing();
+            .setVPSize(200, 200).setVPDistance(1500).enableAntialiasing();
     @Test
     void testAntialiasing() {
         scene1.geometries.add(new Sphere(50, new Point(0,0,-50))

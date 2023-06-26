@@ -52,7 +52,12 @@ public class Color {
       int ib = (int) rgb.d3;
       return new java.awt.Color(ir > 255 ? 255 : ir, ig > 255 ? 255 : ig, ib > 255 ? 255 : ib);
    }
+   public  boolean isAlmostEquals(primitives.Color color) {
 
+      return  (Math.abs(this.rgb.d1-color.rgb.d1)<= 1) &&
+              (Math.abs(this.rgb.d2-color.rgb.d2)<= 1) &&
+              (Math.abs(this.rgb.d3-color.rgb.d3)<=1);
+}
    /** Operation of adding this and one or more other colors (by component)
     * @param  colors one or more other colors to add
     * @return        new Color object which is a result of the operation */

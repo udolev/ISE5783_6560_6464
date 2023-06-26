@@ -6,6 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="cb5b145a-07fc-4911-b0dc-fd1e0811a828" name="Changes" comment="multi-threads added to the project">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/primitives/Color.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/primitives/Color.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/Camera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unittests/renderer/AntialiasingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/renderer/AntialiasingTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unittests/renderer/DepthOfFieldTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/renderer/DepthOfFieldTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unittests/special/TeapotTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unittests/special/TeapotTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -68,7 +72,7 @@
       <recent name="geometries" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.TeapotTest (1)">
+  <component name="RunManager" selected="JUnit.DepthOfFieldTest.testSpheresFloorDOF">
     <configuration name="DepthOfFieldTest.test10ObjectsDOF" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ISE5783_6560_6464" />
       <extension name="coverage">
@@ -96,6 +100,22 @@
       <option name="PACKAGE_NAME" value="renderer" />
       <option name="MAIN_CLASS_NAME" value="renderer.DepthOfFieldTest" />
       <option name="METHOD_NAME" value="testDOF" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DepthOfFieldTest.testDOF2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ISE5783_6560_6464" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="renderer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="renderer" />
+      <option name="MAIN_CLASS_NAME" value="renderer.DepthOfFieldTest" />
+      <option name="METHOD_NAME" value="testDOF2" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -132,28 +152,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TeapotTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ISE5783_6560_6464" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="renderer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="renderer" />
-      <option name="MAIN_CLASS_NAME" value="renderer.TeapotTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.TeapotTest (1)" />
         <item itemvalue="JUnit.DepthOfFieldTest.testSpheresFloorDOF" />
-        <item itemvalue="JUnit.DepthOfFieldTest.test10ObjectsDOF" />
+        <item itemvalue="JUnit.TeapotTest (1)" />
         <item itemvalue="JUnit.DepthOfFieldTest.testDOF" />
-        <item itemvalue="JUnit.TeapotTest" />
+        <item itemvalue="JUnit.DepthOfFieldTest.test10ObjectsDOF" />
+        <item itemvalue="JUnit.DepthOfFieldTest.testDOF2" />
       </list>
     </recent_temporary>
   </component>
@@ -362,7 +367,14 @@
       <option name="project" value="LOCAL‎" />
       <updated>1687701443359</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL‎-00029" summary="multi-threads added to the project">
+      <created>1687703578032</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL‎-00029" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1687703578032</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

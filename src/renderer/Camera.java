@@ -49,24 +49,12 @@ public class Camera {
     double pixelLength;
 
     // Multi Threads
-    int threadsCount = 3;
+    int threadsCount = 4;
 
     // Adaptive Super Sampling
-    int maxLevel = 3;
     boolean adaptiveSuperSampling = false;
     private PixelManager pixelManager;
-    double printInterval;
-
-    public double getPrintInterval() {
-        return printInterval;
-    }
-
-    public Camera setDebugPrint(double printInterval) {
-        this.printInterval = printInterval;
-        return this;
-    }
-
-
+    double printInterval = 0.1;
 
     // Setters
     public Camera setImageWriter(ImageWriter imageWriter) {
@@ -81,54 +69,13 @@ public class Camera {
         return this;
     }
 
-    public Camera setNumOfRaysInLine(int numOfRaysInLine) {
-        this.numOfRaysInLine = numOfRaysInLine;
-        return this;
-    }
-
-    /**
-     * Constructor to initialize the camera with its location point and two direction vectors, as well as a rotation angle.
-     *
-     * @param AngleX the angle to which we will need to rotate the camera to on x-axis
-     * @param AngleY the angle to which we will need to rotate the camera to on y-axis
-     * @param AngleZ the angle to which we will need to rotate the camera to on z-axis
-     * @param p      location point.
-     * @param vu     height direction vector.
-     * @param vt     width direction vector.
-     **/
-    public Camera(Point p, Vector vt, Vector vu, double AngleX, double AngleY, double AngleZ) {
-        p0 = p;
-        if (!isZero(vu.dotProduct(vt))) {
-            throw new IllegalArgumentException("vUp isn't orthogonal to vTo");
-        }
-        vTo = vt;
-        vUp = vu;
-        this.rotateCamera(AngleX, AngleY, AngleZ);
-    }
-
-    /**
-     * Constructor to initialize the camera with its location point and two direction vectors.
-     *
-     * @param p  location point.
-     * @param vu height direction vector.
-     * @param vt width direction vector.
-     **/
-    public Camera(Point p, Vector vt, Vector vu) {
-        p0 = p;
-        if (!isZero(vu.dotProduct(vt))) {
-            throw new IllegalArgumentException("vUp isn't orthogonal to vTo");
-        }
-        vTo = vt.normalize();
-        vUp = vu.normalize();
-        vRight = (vTo.crossProduct(vUp)).normalize();
-    }
-
     /**
      * Setter to initialize/set the height and width of the view plane.
      *
      * @param width  view plane's width.
      * @param height view plane's height.
      **/
+
     public Camera setVPSize(double width, double height) {
         this.height = height;
         this.width = width;
@@ -147,6 +94,86 @@ public class Camera {
         pCenter = p0.add(vTo.scale(distance));
         return this;
     }
+
+    public Camera setNumOfRaysInLine(int numOfRaysInLine) {
+        this.numOfRaysInLine = numOfRaysInLine;
+        return this;
+    }
+
+    /**
+     * Setter to initialize/set the size of the aperture.
+     *
+     * @param apertureSize the aperture size
+     **/
+    public Camera setApertureSize(double apertureSize) {
+        this.apertureSize = apertureSize;
+        return this;
+    }
+
+    /**
+     * Setter to initialize/set the distance between the view plane and the focal plane.
+     *
+     * @param focalDistance the give distance
+     **/
+    public Camera setFocalPlaneDistance(double focalDistance) {
+        if (isZero(focalDistance))
+            throw new IllegalArgumentException("focal distance can't be zero");
+        this.focalDistance = focalDistance;
+        focalPlane = new Plane(pCenter.add(vTo.scale(focalDistance)), vTo);
+        return this;
+    }
+
+    public Camera setMultiThreading(int numOfThreads) {
+        threadsCount = numOfThreads;
+        return this;
+    }
+
+    public Camera setDebugPrint(double printInterval) {
+        this.printInterval = printInterval;
+        return this;
+    }
+
+    // Getters
+
+    /**
+     * Getter to receive the view plane's height.
+     **/
+    public double getHeight() {
+        return height;
+    }
+
+    /**
+     * Getter to receive the view plane's width.
+     **/
+    public double getWidth() {
+        return width;
+    }
+
+    /**
+     * Getter to receive the distance between the camera and the view plane.
+     **/
+    public double getDistance() {
+        return distance;
+    }
+
+
+    /**
+     * Constructor to initialize the camera with its location point and two direction vectors.
+     *
+     * @param p  location point.
+     * @param vu height direction vector.
+     * @param vt width direction vector.
+     **/
+    public Camera(Point p, Vector vt, Vector vu) {
+        p0 = p;
+        if (!isZero(vu.dotProduct(vt))) {
+            throw new IllegalArgumentException("vUp isn't orthogonal to vTo");
+        }
+        vTo = vt.normalize();
+        vUp = vu.normalize();
+        vRight = (vTo.crossProduct(vUp)).normalize();
+    }
+
 
     /**
      * A method to create a ray that starts at the camera and goes through a specific pixel.
@@ -181,26 +208,6 @@ public class Camera {
         return pIJ;
     }
 
-    /**
-     * Getter to receive the view plane's height.
-     **/
-    public double getHeight() {
-        return height;
-    }
-
-    /**
-     * Getter to receive the view plane's width.
-     **/
-    public double getWidth() {
-        return width;
-    }
-
-    /**
-     * Getter to receive the distance between the camera and the view plane.
-     **/
-    public double getDistance() {
-        return distance;
-    }
 
     /**
      * A method to generate a color for every pixel in th view plane.
@@ -225,7 +232,7 @@ public class Camera {
                     // allocate pixel(row,col) in loop until there are no more pixels
                     while ((pixel = pixelManager.nextPixel()) != null)
                         // cast ray through pixel (and color it – inside castRay)
-                        castRay(nX, nY, pixel.col(), pixel.row());
+                        calcPixel(pixel.col(), pixel.row());
                 }));
             // start all the threads
             for (var thread : threads) thread.start();
@@ -272,92 +279,28 @@ public class Camera {
      * A method to generate a color for each pixel. if the depth of field feature is used,
      * will also create the ray-beam to the focal point and calculate the average color to determinate the pixel color.
      **/
-    /**
-     * private Color castRay(int xIndex, int yIndex) {
-     * Ray headRay = constructRay(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
-     * Color pixelColor = rayTracer.traceRay(headRay);
-     * Point pixelPoint = constructPixelPoint(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
-     * <p>
-     * if (adaptiveSuperSampling) {
-     * // Add depth of field
-     * if (!isZero(apertureSize)) {
-     * Point focalPoint = focalPlane.findIntersections(headRay).get(0);
-     * Color c = calcAdaptiveSuperSampling(pixelPoint, focalPoint, apertureSize, apertureSize);
-     * pixelColor = pixelColor.add(calcAdaptiveSuperSampling(pixelPoint, focalPoint, apertureSize, apertureSize));
-     * }
-     * <p>
-     * // Add antialiasing
-     * if (antialiasing) {
-     * pixelColor.add(calcAdaptiveSuperSampling(p0, pixelPoint, pixelWidth, pixelLength));
-     * }
-     * <p>
-     * if (!isZero(apertureSize) && antialiasing)
-     * pixelColor = pixelColor.reduce(3);
-     * else if (!isZero(apertureSize) || antialiasing)
-     * pixelColor = pixelColor.reduce(2);
-     * <p>
-     * } else {
-     * // Add depth of field
-     * if (!isZero(apertureSize)) {
-     * List<Point> aperture = generateAperture(pixelPoint);
-     * Point focalPoint = focalPlane.findIntersections(headRay).get(0);
-     * List<Ray> rayBeam = Ray.generateRayBeamToPoint(aperture, focalPoint);
-     * <p>
-     * for (Ray currentRay : rayBeam)
-     * pixelColor = pixelColor.add(rayTracer.traceRay(currentRay));
-     * }
-     * <p>
-     * // Add antialiasing
-     * if (antialiasing) {
-     * List<Point> targetArea = generateTargetArea(pixelPoint, pixelWidth, pixelLength);
-     * List<Ray> rayBeam = Ray.generateRayBeamFromPoint(targetArea, p0);
-     * for (Ray currentRay : rayBeam)
-     * pixelColor = pixelColor.add(rayTracer.traceRay(currentRay));
-     * }
-     * <p>
-     * if (!isZero(apertureSize) && antialiasing)
-     * pixelColor = pixelColor.reduce(2 * numOfRaysInLine * numOfRaysInLine + 1);
-     * else if (!isZero(apertureSize) || antialiasing)
-     * pixelColor = pixelColor.reduce(numOfRaysInLine * numOfRaysInLine + 1);
-     * }
-     * return pixelColor;
-     * }
-     */
-    /**
-     * Cast ray from camera and color a pixel
-     *
-     * @param nX  resolution on X axis (number of pixels in row)
-     * @param nY  resolution on Y axis (number of pixels in column)
-     * @param col pixel's column number (pixel index in row)
-     * @param row pixel's row number (pixel index in column)
-     */
-    private void castRay(int nX, int nY, int col, int row) {
-        imageWriter.writePixel(col, row, rayTracer.traceRay(constructRay(nX, nY, col, row)));
-        pixelManager.pixelDone();
-    }
 
     private Color castRay(int xIndex, int yIndex) {
         Ray headRay = constructRay(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
-        Color pixelColor = rayTracer.traceRay(headRay);
+        Color pixelColor = new Color(java.awt.Color.BLACK);
         Point pixelPoint = constructPixelPoint(imageWriter.getNx(), imageWriter.getNy(), xIndex, yIndex);
 
         if (adaptiveSuperSampling) {
             // Add depth of field
             if (!isZero(apertureSize)) {
                 Point focalPoint = focalPlane.findIntersections(headRay).get(0);
-                Color c = calcAdaptiveSuperSampling(pixelPoint, focalPoint, apertureSize, apertureSize);
-                pixelColor = pixelColor.add(calcAdaptiveSuperSampling(pixelPoint, focalPoint, apertureSize, apertureSize));
+                pixelColor = calcAdaptiveSuperSampling(focalPoint, pixelPoint, apertureSize, apertureSize);
             }
 
             // Add antialiasing
             if (antialiasing) {
-                pixelColor.add(calcAdaptiveSuperSampling(p0, pixelPoint, pixelWidth, pixelLength));
+                pixelColor = pixelColor.add(calcAdaptiveSuperSampling(pixelPoint, p0, pixelWidth, pixelLength));
             }
 
             if (!isZero(apertureSize) && antialiasing)
-                pixelColor = pixelColor.reduce(3);
-            else if (!isZero(apertureSize) || antialiasing)
                 pixelColor = pixelColor.reduce(2);
+            else if (isZero(apertureSize) && !antialiasing)
+                pixelColor = rayTracer.traceRay(headRay);
 
         } else {
             // Add depth of field
@@ -382,98 +325,132 @@ public class Camera {
                 pixelColor = pixelColor.reduce(2 * numOfRaysInLine * numOfRaysInLine + 1);
             else if (!isZero(apertureSize) || antialiasing)
                 pixelColor = pixelColor.reduce(numOfRaysInLine * numOfRaysInLine + 1);
+            else
+                pixelColor = rayTracer.traceRay(headRay);
         }
+
         return pixelColor;
     }
 
-    Color calcAdaptiveSuperSampling(Point head, Point targetCenter, double sizeX, double sizeY) {
-        Point leftUp = head.add(vUp.scale(sizeY / 2)).add(vRight.scale(-sizeX / 2));
-        Point leftDown = head.add(vUp.scale(-sizeY / 2)).add(vRight.scale(-sizeX / 2));
-        Point rightUp = head.add(vUp.scale(sizeY / 2)).add(vRight.scale(sizeX / 2));
-        Point rightDown = head.add(vUp.scale(-sizeY / 2)).add(vRight.scale(sizeX / 2));
-
-        Color leftUpColor = rayTracer.traceRay(new Ray(leftUp, targetCenter.subtract(leftUp)));
-        Color leftDownColor = rayTracer.traceRay(new Ray(leftDown, targetCenter.subtract(leftDown)));
-        Color rightUpColor = rayTracer.traceRay(new Ray(rightUp, targetCenter.subtract(rightUp)));
-        Color rightDownColor = rayTracer.traceRay(new Ray(rightDown, targetCenter.subtract(rightDown)));
-
-        if (leftUpColor.equals(leftDownColor) && leftUpColor.equals(rightUpColor) && leftUpColor.equals(rightDownColor))
-            return leftUpColor;
-
-        return calcAdaptiveSuperSampling(head.add(vUp.scale(sizeY / 4)).add(vRight.scale(-sizeX / 4)), targetCenter, sizeX / 4, sizeY / 4, 2, leftUpColor, "leftUp").
-                add(calcAdaptiveSuperSampling(head.add(vUp.scale(-sizeY / 4)).add(vRight.scale(-sizeX / 4)), targetCenter, sizeX / 4, sizeY / 4, 2, leftDownColor, "leftDown"),
-                        calcAdaptiveSuperSampling(head.add(vUp.scale(sizeY / 4)).add(vRight.scale(sizeX / 4)), targetCenter, sizeX / 4, sizeY / 4, 2, rightUpColor, "rightUp"),
-                        calcAdaptiveSuperSampling(head.add(vUp.scale(-sizeY / 4)).add(vRight.scale(sizeX / 4)), targetCenter, sizeX / 4, sizeY / 4, 2, rightDownColor, "rightDown")).reduce(4);
+    /**
+     * Cast ray from camera and color a pixel
+     *
+     * @param col pixel's column number (pixel index in row)
+     * @param row pixel's row number (pixel index in column)
+     */
+    private void calcPixel(int col, int row) {
+        imageWriter.writePixel(col, row, castRay(col, row));
+        pixelManager.pixelDone();
     }
 
-    Color calcAdaptiveSuperSampling(Point head, Point targetCenter, double sizeX, double sizeY, int level, Color calculatedColor, String calculatedCorner) {
-        Color leftUpColor, leftDownColor, rightUpColor, rightDownColor;
-        if (calculatedCorner == "leftUp") {
-            Point leftDown = head.add(vUp.scale(-sizeY)).add(vRight.scale(-sizeX));
-            Point rightUp = head.add(vUp.scale(sizeY)).add(vRight.scale(sizeX));
-            Point rightDown = head.add(vUp.scale(-sizeY)).add(vRight.scale(sizeX));
+    Color calcAdaptiveSuperSampling(Point targetPoint, Point headPoint, double sizeX, double sizeY) {
+        Point leftUp = headPoint.add(vUp.scale(sizeY / 2)).add(vRight.scale(-sizeX / 2));
+        Point leftDown = headPoint.add(vUp.scale(-sizeY / 2)).add(vRight.scale(-sizeX / 2));
+        Point rightUp = headPoint.add(vUp.scale(sizeY / 2)).add(vRight.scale(sizeX / 2));
+        Point rightDown = headPoint.add(vUp.scale(-sizeY / 2)).add(vRight.scale(sizeX / 2));
 
-            leftUpColor = calculatedColor;
-            leftDownColor = rayTracer.traceRay(new Ray(leftDown, targetCenter.subtract(leftDown)));
-            rightUpColor = rayTracer.traceRay(new Ray(rightUp, targetCenter.subtract(rightUp)));
-            rightDownColor = rayTracer.traceRay(new Ray(rightDown, targetCenter.subtract(rightDown)));
+        Color leftUpColor = rayTracer.traceRay(new Ray(leftUp, targetPoint.subtract(leftUp)));
+        Color leftDownColor = rayTracer.traceRay(new Ray(leftDown, targetPoint.subtract(leftDown)));
+        Color rightUpColor = rayTracer.traceRay(new Ray(rightUp, targetPoint.subtract(rightUp)));
+        Color rightDownColor = rayTracer.traceRay(new Ray(rightDown, targetPoint.subtract(rightDown)));
 
-        } else if (calculatedCorner == "leftDown") {
-            Point leftUp = head.add(vUp.scale(sizeY)).add(vRight.scale(-sizeX));
-            Point rightUp = head.add(vUp.scale(sizeY)).add(vRight.scale(sizeX));
-            Point rightDown = head.add(vUp.scale(-sizeY)).add(vRight.scale(sizeX));
+        double minSizeX = sizeX / numOfRaysInLine;
+        double minSizeY = sizeY / numOfRaysInLine;
 
-            leftUpColor = rayTracer.traceRay(new Ray(leftUp, targetCenter.subtract(leftUp)));
-            leftDownColor = calculatedColor;
-            rightUpColor = rayTracer.traceRay(new Ray(rightUp, targetCenter.subtract(rightUp)));
-            rightDownColor = rayTracer.traceRay(new Ray(rightDown, targetCenter.subtract(rightDown)));
-        } else if (calculatedCorner == "rightUp") {
-            Point leftUp = head.add(vUp.scale(sizeY)).add(vRight.scale(-sizeX));
-            Point leftDown = head.add(vUp.scale(-sizeY)).add(vRight.scale(-sizeX));
-            Point rightDown = head.add(vUp.scale(-sizeY)).add(vRight.scale(sizeX));
+        return calcAdaptiveSuperSamplingRec(leftUp, leftUpColor, leftDown, leftDownColor, rightUp, rightUpColor, rightDown, rightDownColor, sizeX, sizeY, minSizeX, minSizeY, targetPoint);
+    }
 
-            leftUpColor = rayTracer.traceRay(new Ray(leftUp, targetCenter.subtract(leftUp)));
-            leftDownColor = rayTracer.traceRay(new Ray(leftDown, targetCenter.subtract(leftDown)));
-            rightUpColor = calculatedColor;
-            rightDownColor = rayTracer.traceRay(new Ray(rightDown, targetCenter.subtract(rightDown)));
-        } else {
-            Point leftUp = head.add(vUp.scale(sizeY)).add(vRight.scale(-sizeX));
-            Point leftDown = head.add(vUp.scale(-sizeY)).add(vRight.scale(-sizeX));
-            Point rightUp = head.add(vUp.scale(sizeY)).add(vRight.scale(sizeX));
+    Color calcAdaptiveSuperSamplingRec(Point leftTop, Color leftTopColor, Point leftBottom, Color leftBottomColor, Point rightUp, Color rightUpColor, Point rightBottom, Color rightBottomColor, double sizeX, double sizeY, double minSizeX, double minSizeY, Point target) {
+        Color average = (leftBottomColor.add(leftTopColor, rightBottomColor, rightUpColor)).reduce(4d);
 
-            leftUpColor = rayTracer.traceRay(new Ray(leftUp, targetCenter.subtract(leftUp)));
-            leftDownColor = rayTracer.traceRay(new Ray(leftDown, targetCenter.subtract(leftDown)));
-            rightUpColor = rayTracer.traceRay(new Ray(rightUp, targetCenter.subtract(rightUp)));
-            rightDownColor = calculatedColor;
+        if (average.isAlmostEquals(leftBottomColor) || sizeX <= minSizeX || sizeY <= minSizeY) {
+            return average;
         }
-        if (level == maxLevel + 1 || leftUpColor.equals(leftDownColor) && leftUpColor.equals(rightUpColor) && leftUpColor.equals(rightDownColor))
-            return leftUpColor.add(leftDownColor, rightUpColor, rightDownColor).reduce(4);
 
-        return calcAdaptiveSuperSampling(head.add(vUp.scale(sizeY / 2)).add(vRight.scale(-sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, level + 1, leftUpColor, "leftUp").
-                add(calcAdaptiveSuperSampling(head.add(vUp.scale(-sizeY / 2)).add(vRight.scale(-sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, level + 1, leftDownColor, "leftDown"),
-                        calcAdaptiveSuperSampling(head.add(vUp.scale(sizeY / 4)).add(vRight.scale(sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, level + 1, rightUpColor, "rightUp"),
-                        calcAdaptiveSuperSampling(head.add(vUp.scale(-sizeY / 4)).add(vRight.scale(sizeX / 2)), targetCenter, sizeX / 2, sizeY / 2, level + 1, rightDownColor, "rightDown")).reduce(4);
-    }
+        // Generating a "plus" dividing the square into four squares
+        Point top = leftTop.add(vRight.scale(sizeX / 2));
+        Point bottom = leftBottom.add(vRight.scale(sizeX / 2));
+        Point left = leftBottom.add(vUp.scale(sizeY / 2));
+        Point right = rightBottom.add(vUp.scale(sizeY / 2));
+        Point middle = leftBottom.add(vUp.scale(sizeY / 2)).add(vRight.scale(sizeX / 2));
 
-    Color calcsupersampling(Point leftTop, Color leftTopColor, Point leftBottom, Color leftBottomColor, Point rightTop, Color rightTopColor, Point rightBottom, Color rightBottomColor, int level, Point target) {
-
-        if (leftBottomColor == rightBottomColor && leftBottomColor == leftTopColor && leftBottomColor == rightTopColor)
-            return leftTopColor;
-        Point top = leftTop.add(vRight.scale(leftTop.distance(rightTop) / 2));
-        Point bottom = leftBottom.add(vRight.scale(leftBottom.distance(rightBottom) / 2));
-        Point left = leftBottom.add(vUp.scale(leftBottom.distance(leftTop) / 2));
-        Point right = rightBottom.add(vUp.scale(rightBottom.distance(rightTop) / 2));
-        Point middle = leftBottom.add(vUp.scale(leftBottom.distance(leftTop) / 2)).add(vRight.scale(leftBottom.distance(rightBottom) / 2));
+        // Calculating colors of each point on the plus
         Color topColor = rayTracer.traceRay(new Ray(top, target.subtract(top)));
         Color bottomColor = rayTracer.traceRay(new Ray(bottom, target.subtract(bottom)));
         Color leftColor = rayTracer.traceRay(new Ray(left, target.subtract(left)));
         Color rightColor = rayTracer.traceRay(new Ray(right, target.subtract(right)));
         Color middleColor = rayTracer.traceRay(new Ray(middle, target.subtract(middle)));
-        Color sq1 = calcsupersampling(leftTop, leftTopColor, left, leftColor, top, topColor, middle, middleColor, level - 1, target);
-        Color sq2 = calcsupersampling(top, topColor, middle, middleColor, rightTop, rightTopColor, right, rightColor, level - 1, target);
-        Color sq3 = calcsupersampling(left, leftColor, leftBottom, leftBottomColor, middle, middleColor, bottom, bottomColor, level - 1, target);
-        Color sq4 = calcsupersampling(middle, middleColor, bottom, bottomColor, right, rightColor, rightBottom, rightBottomColor, level - 1, target);
-        return (sq1.add(sq2).add(sq3).add(sq4)).reduce(4);
+
+        // Calculating squares in this order:  sq1 sq2
+        //                                     sq3 sq4
+        Color sq1 = calcAdaptiveSuperSamplingRec(leftTop, leftTopColor, left, leftColor, top, topColor, middle, middleColor, sizeX / 2, sizeY / 2, minSizeX, minSizeY, target);
+        Color sq2 = calcAdaptiveSuperSamplingRec(top, topColor, middle, middleColor, rightUp, rightUpColor, right, rightColor, sizeX / 2, sizeY / 2, minSizeX, minSizeY, target);
+        Color sq3 = calcAdaptiveSuperSamplingRec(left, leftColor, leftBottom, leftBottomColor, middle, middleColor, bottom, bottomColor, sizeX / 2, sizeY / 2, minSizeX, minSizeY, target);
+        Color sq4 = calcAdaptiveSuperSamplingRec(middle, middleColor, bottom, bottomColor, right, rightColor, rightBottom, rightBottomColor, sizeX / 2, sizeY / 2, minSizeX, minSizeY, target);
+
+        // Average of squares is the color of the big square
+        return (sq1.add(sq2, sq3, sq4)).reduce(4);
+    }
+
+
+    /**
+     * A method to generate the aperture for a pixel as a list of points.
+     *
+     * @param pixel the given pixel.
+     **/
+    private List<Point> generateAperture(Point pixel) {
+        return generateTargetArea(pixel, apertureSize, apertureSize);
+    }
+
+    /**
+     * A method to generate a grid target area around a point.
+     *
+     * @param pixel the given pixel.
+     **/
+    private List<Point> generateTargetArea(Point pixel, double sizeX, double sizeY) {
+        if (isZero(sizeX) || isZero(sizeY)) return List.of(pixel);
+        List<Point> targetArea = new LinkedList<>();
+        Point leftCorner = pixel.add(vUp.scale(sizeY / 2)).add(vRight.scale(-sizeX / 2));
+        Point current = leftCorner;
+        for (int i = 0; i <= numOfRaysInLine; ++i) {
+            if (i != 0)
+                current = leftCorner.add(vUp.scale(-sizeY * i / numOfRaysInLine));
+            for (int j = 0; j <= numOfRaysInLine; ++j) {
+                targetArea.add(current);
+                current = current.add(vRight.scale(sizeX / numOfRaysInLine));
+            }
+        }
+        return targetArea;
+    }
+
+    public Camera enableAntialiasing() {
+        antialiasing = true;
+        return this;
+    }
+
+    public Camera enableAdaptiveSuperSampling() {
+        adaptiveSuperSampling = true;
+        return this;
+    }
+
+    /**
+     * Constructor to initialize the camera with its location point and two direction vectors, as well as a rotation angle.
+     *
+     * @param AngleX the angle to which we will need to rotate the camera to on x-axis
+     * @param AngleY the angle to which we will need to rotate the camera to on y-axis
+     * @param AngleZ the angle to which we will need to rotate the camera to on z-axis
+     * @param p      location point.
+     * @param vu     height direction vector.
+     * @param vt     width direction vector.
+     **/
+    public Camera(Point p, Vector vt, Vector vu, double AngleX, double AngleY, double AngleZ) {
+        p0 = p;
+        if (!isZero(vu.dotProduct(vt))) {
+            throw new IllegalArgumentException("vUp isn't orthogonal to vTo");
+        }
+        vTo = vt;
+        vUp = vu;
+        this.rotateCamera(AngleX, AngleY, AngleZ);
     }
 
     /**
@@ -510,74 +487,6 @@ public class Camera {
 
     Vector rotateOnZAxis(Vector V, double Angle) {
         double x = V.getX(), y = V.getY(), z = V.getZ();
-        return new Vector(x * cos(Angle) - y * sin(Angle), x * sin(Angle) + y * cos(Angle), z);
-    }
-
-    /**
-     * A method to generate the aperture for a pixel as a list of points.
-     *
-     * @param pixel the given pixel.
-     **/
-    private List<Point> generateAperture(Point pixel) {
-        return generateTargetArea(pixel, apertureSize, apertureSize);
-    }
-
-    /**
-     * A method to generate a grid target area around a point.
-     *
-     * @param pixel the given pixel.
-     **/
-    private List<Point> generateTargetArea(Point pixel, double sizeX, double sizeY) {
-        if (isZero(sizeX) || isZero(sizeY)) return List.of(pixel);
-        List<Point> targetArea = new LinkedList<>();
-        Point leftCorner = pixel.add(vUp.scale(sizeY / 2)).add(vRight.scale(-sizeX / 2));
-        Point current = leftCorner;
-        for (int i = 0; i < numOfRaysInLine; ++i) {
-            if (i != 0)
-                current = leftCorner.add(vUp.scale(-sizeY * i / numOfRaysInLine));
-            for (int j = 0; j < numOfRaysInLine; ++j) {
-                targetArea.add(current);
-                current = current.add(vRight.scale(sizeX / numOfRaysInLine));
-            }
-        }
-        return targetArea;
-    }
-
-    /**
-     * Setter to initialize/set the size of the aperture.
-     *
-     * @param apertureSize the aperture size
-     **/
-    public Camera setApertureSize(double apertureSize) {
-        this.apertureSize = apertureSize;
-        return this;
-    }
-
-    /**
-     * Setter to initialize/set the distance between the view plane and the focal plane.
-     *
-     * @param focalDistance the give distance
-     **/
-    public Camera setFocalPlaneDistance(double focalDistance) {
-        if (isZero(focalDistance))
-            throw new IllegalArgumentException("focal distance can't be zero");
-        this.focalDistance = focalDistance;
-        focalPlane = new Plane(pCenter.add(vTo.scale(focalDistance)), vTo);
-        return this;
-    }
-
-    Camera enableAntialiasing() {
-        antialiasing = true;
-        return this;
-    }
-
-    Camera enableAdaptiveSuperSampling() {
-        adaptiveSuperSampling = true;
-        return this;
-    }
-
-    public Camera setMultithreading(int numOfThreads) {
-        threadsCount = numOfThreads;
-        return this;
+        return new Vector(x * cos(Angle) - y * sin(Angle), x * sin(Angle) + y * cos(Angle),z);
     }
 }
